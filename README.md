@@ -1,2 +1,4 @@
 # FINKI
-exercies for finki subjects
+
+exercises for finki subjects
+
