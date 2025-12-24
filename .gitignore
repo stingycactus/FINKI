@@ -1,0 +1,34 @@
+# ===== JetBrains / CLion =====
+.idea/
+cmake-build-*/
+out/
+
+# ===== Build artifacts =====
+*.o
+*.obj
+*.exe
+*.out
+*.app
+*.dll
+*.so
+*.a
+*.lib
+
+# ===== CMake =====
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# ===== Debug / profiling =====
+*.log
+*.tmp
+*.prof
+
+# ===== OS junk =====
+.DS_Store
+Thumbs.db
+
+# ===== Editor backups =====
+*~
+*.swp
