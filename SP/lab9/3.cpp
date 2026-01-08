@@ -1,9 +1,6 @@
 //
 // Created by cactus on 03/01/2026.
 //
-//
-// Created by cactus on 03/01/2026.
-//
 #include <cstring>
 #include <iostream>
 using namespace std;
