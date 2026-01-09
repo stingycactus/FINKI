@@ -11,7 +11,7 @@ bool palindromeCheck(char *word) {
     bool palindrome = true;
     for (int i = 0; i<size/2; i++) {
         for (int j = 0; j<5; j++) {
-            if (word[i]==vowels[j]) {
+            if (tolower(word[i])==vowels[j]) {
                 if (tolower(word[i])!=tolower(word[size-1-i])) {
                     palindrome = false;
                     break;
