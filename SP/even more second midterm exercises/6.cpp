@@ -4,7 +4,7 @@ void printOnes(int number) {
     if (!number) {
         return;
     }
-    cout<<'1';
+    cout<<number;
     printOnes(number-1);
 }
 void printFunc(int number) {
