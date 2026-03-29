@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #heading1 {
+            background-color: mediumseagreen;
+        }
+
+        .paragraphs {
+            background-color: yellow;
+        }
+
+        /* article p is useless because lower
+        specificity than prev selector*/
+        article p {
+            background-color: lightseagreen;
+        }
+
+        article > h2 {
+            background-color: lightseagreen;
+        }
+
+        article ~ p {
+            background-color: red;
+        }
+        /*article+p overrides first para after article*/
+        article + p {
+            background-color:lightseagreen;
+        }
+        section > p {
+            background-color: lightseagreen;
+        }
+        section a[href="https://www.youtube.com"] {
+            background-color: green;
+        }
+        /*overrides prev selector*/
+        section a[href^="https"]{
+            background-color: lime;
+        }
+        section a[href$="1"]{
+            background-color: purple;
+        }
+        section p[lang|="en-GB"]{
+            background-color: blue;
+        }
+        a[rel~=tag]{
+            background-color: cyan;
+        }
+        body > p:hover {
+            color:dimgrey;
+        }
+        #ytLink:focus {
+            background-color: white;
+        }
+        #h1Link:active {
+            color: yellow
+        }
+    </style>
+</head>
+<body>
+<h1 id="heading1">Head</h1>
+<p class="paragraphs">Paragraph</p>
+<article>
+    <h2>Head in article</h2>
+    <p class="paragraphs">Paragraph</p>
+    <div><h2>Head in div in article</h2></div>
+</article>
+<section>
+    <p>Paragraph in section</p>
+    <div><p>Paragraph in div in section</p></div>
+    <a href="https://www.youtube.com" id = "ytLink">Link to yt inside section</a>
+    <br>
+    <a href=#heading1 id="h1Link">Heading 1</a>
+    <div><p lang="en-GB">Blimey</p></div>
+</section>
+<a href="#" rel="tag nofollow">whitespace selector test</a>
+<p>Paragraph after article</p>
+<p>Paragraph2 after article</p>
+</body>
+</html>
