@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+      h1 {
+          color: red;
+      }
+      .center {
+        text-align: center;
+      }
+      .nav {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+      .img {
+          display: flex;
+          justify-content: center;
+          margin: 20px auto;
+          width:200px;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          padding: 15px;
+          border-radius: 10px;
+          box-shadow: 0px 0px 8px black;
+      }
+      .nav button {
+        border: lightgrey solid 2px;
+        border-radius: 5px;
+        background: lightgrey;
+        padding: 5px;
+      }
+      .img img {
+          height:200px;
+          width:200px;
+          border: none;
+          border-radius:10px;
+      }
+      .img button {
+          background-color: crimson;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          padding: 8px 15px;
+          cursor: pointer;
+      }
+      table {
+          margin: 0 auto;
+          border-collapse: collapse;
+      }
+      table td, table th {
+          width:350px;
+          height:25px;
+          border: lightblue solid 2px;
+          text-align: center;
+      }
+      table th {
+          background-color:red;
+          color:white;
+      }
+      .buttons {
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+          margin: 10px;
+      }
+      .buttons button {
+          width: 80px;
+          padding:10px;
+          border: none;
+          border-radius: 5px;
+      }
+      .buttons button:nth-child(6n+3) {
+          background-color:red;
+      }
+      .buttons button:nth-child(2n) {
+          background-color:pink;
+      }
+      button:hover {
+          cursor:pointer;
+      }
+      .paragraphChildren > p {
+          color:red;
+      }
+    </style>
+</head>
+<body>
+<h1 class="center">Movie Dashboard</h1>
+<p class="center"><small>Hover and click to explore movies</small></p>
+<div class="nav">
+  <button>Now Showing</button>
+  <button>Top Rated</button>
+  <button>Upcoming</button>
+  <button>My List</button>
+</div>
+<div class="img">
+    <img src="Screenshot_2.png" alt="">
+    <button>Watch Trailer</button>
+</div>
+<table>
+    <tr><th>Movie</th><th>Rating</th><th>Genre</th></tr>
+    <tr><td>Inception</td><td>8.8</td><td>Sci-Fi</td></tr>
+    <tr><td>Interstellar</td><td>9.8</td><td>Sci-Fi</td></tr>
+    <tr><td>Joker</td><td>6.8</td><td>Drama</td></tr>
+    <tr><td>Avengers</td><td>9.0</td><td>Action</td></tr>
+</table>
+<div class="buttons">
+    <button>1</button><button>2</button><button>3</button>
+    <button>4</button><button>5</button><button>6</button>
+    <button>7</button><button>8</button><button>9</button>
+</div>
+<div class = "paragraphChildren center">
+    <p>This is a direct child movie description</p>
+    <div>
+        <p>This paragraph is not affected</p>
+    </div>
+</div>
+</body>
+</html>
