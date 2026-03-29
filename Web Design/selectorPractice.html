@@ -57,6 +57,42 @@
         #h1Link:active {
             color: yellow
         }
+        table tr:nth-child(2n){
+            background-color: lightseagreen;
+        }
+        table {
+            float: left
+        }
+        table td, table th {
+            border: 5px solid black;
+        }
+        .childSelector p:first-child{
+            color:yellow;
+        }
+        .childSelector p:first-of-type{
+            color:blue;
+        }
+        /* wont work cuz of the other before stuff*/
+        .childSelector p:last-of-type::first-letter{
+            color:red;
+        }
+        /* inserts content before the element */
+        .childSelector p:last-of-type::before {
+            content: "'";
+        }
+
+        /* inserts content after the element */
+        .childSelector p:last-of-type::after {
+            content: "'";
+        }
+        .nthChildSelector p:nth-child(2n){
+            display: block;
+            overflow: hidden;
+            background-color: lightseagreen;
+        }
+        .nthChildSelector p:nth-of-type(2n){
+            color:orange;
+        }
     </style>
 </head>
 <body>
@@ -78,5 +114,37 @@
 <a href="#" rel="tag nofollow">whitespace selector test</a>
 <p>Paragraph after article</p>
 <p>Paragraph2 after article</p>
+<table>
+    <tbody>
+    <tr><td rowspan="4">Col 1</td><td>Col 2</td></tr>
+    <tr><td>Col 2</td></tr>
+    <tr><td>Col 2</td></tr>
+    <tr><td>Col 2</td></tr>
+    <tr><td rowspan="3">Col 1</td><td>Col 2</td></tr>
+    <tr><td>Col 2</td></tr>
+    <tr><td>Col 2</td></tr>
+    <tr><td rowspan="3">Col 1</td><td>Col 2</td></tr>
+    <tr><td>Col 2</td></tr>
+    <tr><td>Col 2</td></tr>
+    <tr><td>Col 1</td><td>Col 2</td></tr>
+    <tr><td>Col 1</td><td>Col 2</td></tr>
+    <tr><td>Col 1</td><td>Col 2</td></tr>
+    <tr><td>Col 1</td><td>Col 2</td></tr>
+    </tbody>
+</table>
+
+<div class="childSelector">
+    <div>Div</div>
+    <p>Won't be selected with first-child,
+    but will be with first-of-type,
+    last-of-child, last-of-type</p>
+</div>
+<div class="nthChildSelector">
+    <p>1</p>
+    <p>2</p>
+    <div>Div 3</div>
+    <p>4</p>
+    <p>4</p>
+</div>
 </body>
 </html>
