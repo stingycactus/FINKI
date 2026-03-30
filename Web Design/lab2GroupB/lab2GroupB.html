@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    .center {
+        text-align:center;
+    }
+    h1{
+        background-color:blue;
+        color:white;
+        margin:0;
+        padding:20px;
+    }
+    .container{
+        background:lightgray;
+        display:flex;
+        height:auto;
+        justify-content: center;
+        flex-direction: row;
+    }
+    .nav {
+        margin-left:10px;
+        margin-top:10px;
+        margin-right:10px;
+        height:200px;
+        width:140px;
+        background-color:white;
+        display:flex;
+        flex-direction: column;
+        padding:20px;
+    }
+    .nav button{
+        text-align:left;
+        height:32px;
+        border:none;
+        margin:3px;
+    }
+    .nav button:nth-child(2n){
+      background-color:yellow;
+    }
+    .nav button:nth-child(3n){
+        background-color:cyan;
+    }
+    section {
+        display:flex;
+        flex-direction: column;
+    }
+    section img{
+        width:120px;
+        height:140px;
+        border:3px solid black;
+        padding:5px;
+    }
+    section > button{
+        width:70px;
+        height:30px;
+        margin-top:20px;
+        margin-bottom:20px;
+        background-color:blue;
+        color:white;
+    }
+    section table {
+        background-color:white;
+        border-collapse:collapse;
+        display:flex;
+    }
+    section table td, section table th {
+        width:200px;
+        height:25px;
+        border: 2px solid black;
+    }
+    section table th {
+        background-color:lightblue;
+    }
+    section table tr:nth-child(4n){
+        background-color:yellow;
+    }
+    .buttons {
+        display:flex;
+        flex-direction: row;
+    }
+    .buttons button {
+        border:none;
+        margin-top:20px;
+        margin-left:5px;
+        height:40px;
+        width:80px;
+    }
+    section aside p:first-child {
+        color:red;
+    }
+    h1:hover {
+        background-color:lime;
+    }
+    .nav button:hover {
+        background-color:lime;
+    }
+    p:hover{
+        cursor:pointer;
+    }
+    p:active {
+        background-color:lime;
+    }
+    section img:hover{
+        width:140px;
+        height:160px;
+        border:3px solid black;
+        padding:5px;
+    }
+    section > button:hover {
+        background-color:red;
+    }
+    section table tr:hover {
+        background-color:lime;
+    }
+    aside {
+        padding:10px;
+        margin:20px 0;
+        background-color:white;
+    }
+    .buttons button:nth-child(3n){
+        background-color:lightgreen;
+    }
+    .buttons button:nth-child(4n){
+        background-color:lightcoral;
+    }
+  </style>
+</head>
+<body>
+<h1 class="center">Student Dashboard</h1>
+<div class="container">
+  <div class="nav">
+    <button>Home</button>
+    <button>Courses</button>
+    <button>Assignments</button>
+    <button>Grades</button>
+    <button>Messages</button>
+    <button>Settings</button>
+  </div>
+  <section>
+    <p>Click this paragraph to see the effect</p>
+    <img src="student.png" alt="">
+    <button>Submit</button>
+    <table class="center">
+      <tr><th>Course</th><th>Score</th><th>Status</th></tr>
+      <tr><td>Web</td><td>10</td><td>Passed</td></tr>
+      <tr><td>OOP</td><td>9</td><td>Passed</td></tr>
+      <tr><td>DB</td><td>8</td><td>Passed</td></tr>
+      <tr><td>AI</td><td>10</td><td>Passed</td></tr>
+    </table>
+    <div class="buttons">
+      <button>A</button><button>B</button><button>C</button>
+      <button>D</button><button>E</button><button>F</button>
+    </div>
+    <aside>
+      <p>Click paragraph to see the effect.</p>
+      <p>Click this paragraph to see the effect.</p>
+    </aside>
+  </section>
+</div>
+</body>
+</html>
