@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="navCSS.css">
+  <style>
+    .container{
+      background:khaki;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      padding-top:100px;
+      height:100vh;
+    }
+    .box {
+      background: white;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      width: 900px;
+      padding: 40px 60px;
+      box-shadow: 20px 20px gray;
+    }
+    .boxLeft p:first-of-type{
+      font-weight:bold;
+    }
+    .boxLeft {
+      border-right: 1px solid lightgray;
+      padding-right: 40px;
+    }
+    button {
+      background:cornflowerblue;
+      color:white;
+      border:none;
+      margin: 20px 0;
+      height:20px;
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="lab3GroupA.html">ENTRY</a>
+  <a href="catalog.html">CATALOG</a>
+  <a href="review.html">REVIEW</a>
+</nav>
+<div class="container">
+  <div class="box">
+    <div class="boxLeft">
+      <h1>The review</h1>
+      <hr>
+      <h1>* * * * *</h1>
+      <p>The shadow of the Wind</p>
+      <p>Carlos Ruiz Zafon</p>
+      <br>
+      <p>A gripping tale set in the heart of Barcelona's Cemetery of Forgotten</p>
+      <p>Books. A Masterpiece of atmosphere and mystery.</p>
+    </div>
+    <div class="boxRight">
+      <h1>The Verdict</h1>
+      <hr>
+      <p>Zafon reminds us why we fell in love with reading in the first place.<br>
+      The prose is lush, the characters are haunting, and the plot is perfectly<br>
+      paced.</p>
+      <hr>
+      <p><strong>Must Read:</strong> Definitely.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
