@@ -5,51 +5,51 @@
     <title>Title</title>
     <link rel="stylesheet" href="navCSS.css">
     <style>
-        .container{
-            background:khaki;
-            display:flex;
-            justify-content:center;
-            align-items:flex-start;
-            padding-top:100px;
-            height:100vh;
+        .container {
+            border-top: 3px solid rgba(50, 50, 50);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: #DCD7C9;
+            height: 100vh;
         }
         .box {
             background: white;
-            display: grid;
+            display:grid;
             grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            width: 900px;
-            padding: 40px 60px;
-            box-shadow: 20px 20px gray;
+            gap:60px;
+            padding: 40px;
+            box-shadow: 20px 20px #A39E93;
         }
-        .boxLeft p:nth-child(even){
-            font-weight:bold;
-        }
-        .boxLeft {
-            border-right: 1px solid lightgray;
-            padding-right: 40px;
-        }
-        button {
-            background:cornflowerblue;
+        .box button {
+            background:rgba(0,20,150);
             color:white;
-            border:none;
             margin: 20px 0;
-            height:20px;
+            padding:5px;
+        }
+        .LeftBox p:nth-of-type(odd){
+            font-weight:bolder;
+        }
+        .LeftBox {
+            padding-right:20px;
+            border-right:2px solid lightgray;
         }
     </style>
 </head>
 <body>
-<nav>
-    <a href="lab3GroupA.html">ENTRY</a>
+<nav class="navContainer">
+    <a href="entry.html">ENTRY</a>
     <a href="catalog.html">CATALOG</a>
     <a href="review.html">REVIEW</a>
 </nav>
 <div class="container">
     <div class="box">
-        <div class="boxLeft">
+        <div class="LeftBox">
             <h1>Current Classics</h1>
             <hr>
-            <button>FICTION</button>
+            <button>
+                FICTION
+            </button>
             <p>The Great Gatsby</p>
             <p>F. Scott Fitzgerald</p>
             <p>1984</p>
@@ -57,14 +57,16 @@
             <p>Brave New World</p>
             <p>Aldous Huxley</p>
         </div>
-        <div class="boxRight">
+        <div class="RightBox">
             <h1>Modern Voices</h1>
             <hr>
-            <button>ESSAYS</button>
+            <button>
+                ESSAYS
+            </button>
             <p>Explore our collection of contemporary essays gathered<br>
             from authors across the globe.</p>
             <hr>
-            <q><em>A Room without books is like a body without a soul.</em></q>
+            <q><em>A room without books is like a body without a soul.</em></q>
         </div>
     </div>
 </div>
