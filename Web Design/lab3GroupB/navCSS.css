@@ -1,0 +1,21 @@
+.navContainer {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:60px;
+    background-color:#13283E;
+    height:60px;
+}
+body {
+    margin: 0;
+}
+.navContainer > a {
+    color:#61DEFF;
+    text-decoration: none;
+    font-size:20px;
+    padding:10px;
+}
+.navContainer > a:hover {
+    background: #181A1B;
+    border-radius:5px;
+}

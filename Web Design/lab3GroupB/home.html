@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="navCSS.css">
+    <style>
+        .page {
+            background-color: #02162A;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            text-align:center;
+            background: #162342;
+            color: white;
+            border-radius: 10px;
+            padding:30px;
+        }
+        .boxContainer {
+            display: flex;
+            justify-content: center;
+            margin:50px;
+            gap:30px;
+        }
+        .container > h1 {
+            font-size:50px;
+        }
+        .container >p {
+            font-size:18px;
+        }
+        .creatureBox, .expeditionsBox, .diversBox{
+            padding:15px 30px;
+            background: #314A68;
+            border-radius:10px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navContainer">
+    <a href="home.html">Home</a>
+    <a href="expeditions.html">Expeditions</a>
+    <a href="divers.html">Divers</a>
+</nav>
+<div class="page">
+    <div class="container">
+        <h1>Explore the Ocean</h1>
+        <p>Ocean exploration helps us understand marine life, discover underwater worlds,<br>
+            and learn more about mysteries of the deep sea </p>
+        <div class="boxContainer">
+            <div class="creatureBox">
+                <h1>Creatures</h1>
+                <p>Learn about amazing animals <br>
+                    that live in the ocean.</p>
+            </div>
+            <div class="expeditionsBox">
+                <h1>Expeditions</h1>
+                <p>Discover famous deep-sea <br>
+                    exploration missions.</p>
+            </div>
+            <div class="diversBox">
+                <h1>Divers</h1>
+                <p>Meet the people who explore <br>
+                    the underwater world.</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
