@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 60px;
+            height: 60px;
+            border-bottom: 3px dashed #EE9CA7;
+        }
+
+        .header h1 {
+            color: #EE9CA7;
+        }
+
+        .header ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding: 60px 60px;
+            background-color: #FFDDE1;
+        }
+
+        .container img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .text > h1 {
+            font-size: 48px;
+            color: #FFFFFF;
+            text-shadow: 2px 2px #EE9BA6;
+        }
+
+        .text button {
+            border-radius: 30px;
+            padding: 10px 20px;
+            background-color: #EE9CA7;
+            color: white;
+            font-weight: bold;
+        }
+
+        .container2 {
+            background-color: #FDFDFD;
+            padding: 40px 60px;
+        }
+
+        .container2 > h1 {
+            text-align: center;
+            margin-bottom: 100px;
+        }
+
+        .cardContainer {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .card {
+            background-color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .cardText {
+            padding: 20px;
+        }
+
+        .cardText > h2 {
+            padding: 10px;
+            color: #EE9CA7;
+        }
+
+        .cardText > p {
+            font-size: 14px;
+        }
+
+        .cardImage {
+            background-color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+        }
+
+        .cardImage img {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px 20px 0 0;
+            display: block;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input, textarea {
+            display: block;
+            margin-top: 4px;
+        }
+
+        .container3 {
+            background-color: #FFDDE1;
+            padding: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .container3 form {
+            background-color:white;
+            padding: 40px;
+            border-radius:15px;
+            width:50%;
+        }
+        .container3 input, .container3 textarea {
+            width:100%;
+            border: 2px solid yellow;
+            border-radius:8px;
+            padding:5px;
+            margin:10px;
+        }
+        .container3 button {
+            background-color: #EE9CA7;
+            width:100%;
+            color:white;
+            border-radius:20px;
+            border: 2px solid black;
+            padding: 10px;
+        }
+        footer {
+            background-color:#5D4037;
+            color:#FEFEB4;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:80px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Limone & Rose</h1>
+    <ul>
+        <li>Amalfi</li>
+        <li>Positano</li>
+        <li>Capri</li>
+        <li>Say Ciao</li>
+    </ul>
+</div>
+<div class="container">
+    <div class="text">
+        <h1>Pink Italian<br>
+            Sunsets</h1>
+        <p>Explore the lemon groves of Sorrento and the pastel-colored <br>
+            cliffs of the South. Life is sweeter in the sun!</p>
+        <br>
+        <button>Explore the Coast</button>
+    </div>
+    <div class="image">
+        <img src="Screenshot_2.png" alt="">
+    </div>
+</div>
+<div class="container2">
+    <h1>Sunshine Moments</h1>
+    <div class="cardContainer">
+        <div class="card">
+            <div class="cardImage">
+                <img src="ss.png" alt="">
+            </div>
+            <div class="cardText">
+                <h2>Lush Limoncellos</h2>
+                <p>Visit the world-famous grooves where the lemons grow as big as footballs!</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="cardImage">
+                <img src="Screenshot_3.png" alt="">
+            </div>
+            <div class="cardText">
+                <h2>Positano Pink</h2>
+                <p>Wander through winding streets filled with pink flowers and painted walls.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="cardImage">
+                <img src="Screenshot_4.png" alt="">
+            </div>
+            <div class="cardText">
+                <h2>Capri Blue</h2>
+                <p>Take a boat through the glowing caves and feel the magic of the Mediterranean</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container3">
+    <h2>Send us a Postcard!</h2>
+    <form>
+        <label>
+            Your Name
+            <input type="text" placeholder="Write your name here...">
+        </label>
+        <label>
+            Email Address
+            <input type="text" placeholder="ciao@italy.com">
+        </label>
+        <label>
+            Your Dream Destination
+            <textarea placeholder="I want to see the lemon trees in Sorrento..."></textarea>
+        </label>
+        <button>Send love</button>
+    </form>
+</div>
+<footer>
+    <p>© 2026 Limone & Rose</p>
+</footer>
+</body>
+</html>
