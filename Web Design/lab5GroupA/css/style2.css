@@ -1,0 +1,245 @@
+/* Index - FullName */
+/* 251505 - Филип Аџиниколов */
+body{
+    margin:0 auto;
+    max-width:1500px;
+    background-color:#8D6A4A;
+}
+
+#search_bar_wrapper {
+    background-image: url("../image/search_wrapper.jpg");
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    height:50px;
+    width:1500px;
+}
+
+#search_bar{
+    background-image: url("../image/search.jpg");
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    height:50px;
+    width:1500px;
+}
+#search_box {
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    height:50px;
+    padding-right:360px;
+}
+#searchfield {
+    width:125px;
+}
+#search_box form input {
+    background:transparent;
+    border:none;
+    color:white;
+}
+#searchbutton {
+    margin:25px;
+}
+#banner_bar_wrapper{
+    background-image: url("../image/banner_wrapper.jpg");
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    height:160px;
+    width:1500px;
+}
+#banner_bar{
+    background-image: url("../image/banner.jpg");
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    height:160px;
+    width:1500px;
+}
+
+#menu_wrapper {
+    background-image: url("../image/menu_wrapper.jpg");
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    height:60px;
+    width:1500px;
+}
+#menu {
+    overflow:hidden;
+    background-image: url("../image/menu.jpg");
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    height:60px;
+    width:1500px;
+}
+#menu ul {
+    list-style:none;
+    display:flex;
+    justify-content:flex-end;
+    gap:20px;
+    padding-right:350px;
+}
+#menu ul li {
+    border-right: 1px solid white;
+    padding-right:10px;
+}
+a {
+    text-decoration: none;
+    color:white;
+}
+#menu_wrapper #menu ul li.last {
+    border-right:none;
+}
+#menu_wrapper #menu ul li a.current{
+    text-decoration:underline;
+    text-decoration-style: dotted;
+}
+
+#content_wrapper {
+    overflow:hidden;
+    background-image: url("../image/content_wrapper.jpg");
+    background-repeat:no-repeat;
+    background-size:cover;
+    background-position:center;
+    width:1500px;
+    height:1130px;
+}
+#content {
+    overflow:hidden;
+    background-image: url("../image/content_bg.jpg");
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    width:980px;
+    height:1130px;
+    margin-left:260px;
+}
+
+.section_one {
+    text-align:center;
+}
+.section_one h1 {
+    color:yellow;
+}
+.section_one p {
+    color:#F0FECB;
+    font-size:20px;
+    margin-bottom:20px;
+}
+#content p {
+    color:#F0FECB;
+}
+h2 {
+    color:yellow;
+    background-image: url("../image/header_bg.png");
+    background-repeat:no-repeat;
+    background-size: contain;
+    background-position:left;
+    padding-left:60px;
+    height:79px;
+}
+
+.cleaner_h20 {
+    clear:both;
+
+}
+.fl {
+    float:left;
+    width:48%;
+}
+.section_content > a {
+    display:block;
+    border:1px solid white;
+    background-image: url("../image/image_01.jpg");
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    width:370px;
+    height:120px;
+}
+.section_content ul li {
+    list-style-image:url("../image/list_icon.png");
+    margin-bottom:10px;
+}
+.section_content ul li a {
+    color:black;
+}
+.fr {
+    float:right;
+    width:48%
+}
+.cleaner_h30 {
+    clear:both;
+}
+.section_w950 {
+    float:left;
+}
+.image_wrapper_02 {
+    background-image: url("../image/gallery_img_frame.png");
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    width:192px;
+    height:192px;
+    float:left;
+    margin:20px;
+}
+.image_wrapper_02 a {
+    display:block;
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    width:160px;
+    height:160px;
+    margin-left:10px;
+    margin-top:20px;
+}
+.image_wrapper_02:nth-of-type(1) a {
+    background-image: url("../image/image_02.jpg");
+}
+.image_wrapper_02:nth-of-type(2) a {
+    background-image: url("../image/image_03.jpg");
+}
+.image_wrapper_02:nth-of-type(3) a {
+    background-image: url("../image/image_04.jpg");
+}
+.image_wrapper_02:nth-of-type(4) a {
+    background-image: url("../image/image_05.jpg");
+}
+.cleaner{
+    clear:both;
+}
+.button_01 {
+    background-image: url("../image/read_more.png");
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    width:164px;
+    height:37px;
+    float:right;
+    padding-left:150px;
+}
+.button_01 a {
+    color:yellow;
+}
+#footer{
+    background-image: url("../image/footer_bg.png");
+    background-repeat:no-repeat;
+    background-size:contain;
+    width:980px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height: 100px;
+}
+
+a:hover {
+    color:yellow;
+    text-decoration:underline;
+}
+/* Good luck */
+/* Со среќа */
+
