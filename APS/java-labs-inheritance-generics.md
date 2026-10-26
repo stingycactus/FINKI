@@ -106,18 +106,14 @@ else others++;
 - No generics in this lab, arrays only.
 - The lab doesn't say what `hire()` does when the company is full, or what `highestPaid()` returns when it's empty. Guard both (ignore the extra hire, return `null`).
 
-## 1.6 The locale trap
-
-- Use `double`. Add `in.useLocale(Locale.US);` after creating the `Scanner`, and use `Locale.US` in `String.format` / `printf`, otherwise a decimal-comma machine reads `100.5` wrong and prints `4500,00`.
-
-## 1.7 Parsing the input
+## 1.6 Parsing the input
 
 - Read `n`, then for each line `type = in.next()`, then `id`, `name` (single tokens), `base` (`nextDouble`), and the extra ints depending on the type (`D`: 1, `L`: 2, `I`: 1).
 - Use `switch (type)` with `case "E":`, and put each case in `{ }` with a `break;`, otherwise same-named variables clash.
 - The last line is the threshold.
 
 
-## 1.8 Build order and full sample
+## 1.7 Build order and full sample
 
 Order: `Employee` → `Developer` → `TeamLead` → `Intern` → `Company.hire/printAll` → statistics → totals → `highestPaid` / `countAbove` → `main`.
 
@@ -326,3 +322,103 @@ No "Top electronics" line, because `Tech` is empty.
 **Testing input quickly (very useful for these labs)**
 - Run → Edit Configurations... → Modify options → **Redirect input** → choose a text file containing your sample input. The program then reads from the file instead of making you retype everything each run.
 - Make one file per sample (`sample1.txt`, `sample2.txt`) and switch between them.
+
+---
+
+# 4. Appendix: the original lab statements
+
+Plain text, copied as given. Both labs were due Sunday 25 Oct 2026 (APS, FINKI). The lab platform runs Java 11, so `.formatted()`, text blocks and records are not available; use `String.format`.
+
+## Lab 1: FINKI Soft
+
+````text
+Write a program that calculates salaries in the software company FINKI Soft.
+The class `Employee` is the base class. Each employee has:
+
+* `id` (String)
+* `name` (String)
+* `baseSalary` (double)
+
+The method `calculateSalary()` returns the base salary. The method `toString()` returns a string in the format `ID NAME salary=SALARY`, where `SALARY` is the result of `calculateSalary()`, printed with 2 decimals.
+The class `Developer` extends `Employee` and adds the attribute `overtimeHours` (int). The salary is the base salary plus 300 per overtime hour. `toString()` appends `overtime=H`.
+The class `TeamLead` extends `Developer` and adds the attribute `teamSize` (int). The salary is the `Developer` salary plus 1000 per team member. If the team has 5 or more members, the total salary is increased by 5%. `toString()` appends `team=T`.
+The class `Intern` extends `Employee` and adds the attribute `months` (int). An intern receives 60% of the base salary, or 80% if they have been with the company 6 or more months. `toString()` appends `months=M`.
+The class `Company` stores employees in an `Employee[]` array. It is created with a name and a capacity. It must have the following methods:
+
+* `hire(Employee e)` – adds an employee
+* `printAll()` – prints `=== NAME ===`, then each employee on a separate line
+* `printStatistics()` – prints `Developers: X, Team leads: Y, Interns: Z, Others: W`. Team leads are not counted as developers, and `Others` are plain employees.
+* `totalPayroll()` – the sum of all salaries
+* `averageSalary()` – the average salary
+* `highestPaid()` – the employee with the highest salary; on a tie, return the first one
+* `countAbove(double threshold)` – the number of employees whose salary is strictly greater than the threshold
+
+All subclass constructors must call `super(...)`. All subclass calculations must use `super.calculateSalary()`. Generics are not allowed (`ArrayList<>`, `List<>`, etc.).
+Input:
+
+* the first line contains `N`, the number of employees
+* then follow `N` lines, each in one of these formats:
+   * `E id name base`
+   * `D id name base overtime`
+   * `L id name base overtime teamSize`
+   * `I id name base months`
+* the last line contains the threshold `X`
+
+Output:
+Create a company named `FINKI Soft` and print the following, in this order:
+
+1. the list of employees (`printAll`)
+2. the statistics (`printStatistics`)
+3. `Total payroll: TOTAL`
+4. `Average salary: AVG`
+5. `Highest paid: ID NAME (SALARY)`
+6. `Employees with salary above X: COUNT`
+
+All decimal values are printed with 2 decimals.
+````
+
+## Lab 2: Warehouse
+
+````text
+Write a program for a warehouse in which products are stored in containers.
+The class `Product` has:
+
+* `name` (String)
+* `price` (double)
+
+The method `finalPrice()` returns the price. The method `toString()` returns a string in the format `NAME price=PRICE final=FINAL`, with both prices printed to 2 decimals.
+The class `Food` extends `Product` and has the attribute `daysToExpiry` (int). If there are 3 or fewer days until expiry, the final price is 50% of the price. `toString()` appends `days=D`.
+The class `Electronics` extends `Product` and has the attribute `warrantyMonths` (int). If the warranty is longer than 24 months, the final price is increased by 15%. `toString()` appends `warranty=W`.
+The generic class `Pair<K, V>` stores a key and a value. It has a constructor and the methods `getKey()` and `getValue()`.
+The generic class `Container<T extends Product>` stores products of type `T`. The notation `extends Product` means `T` must be `Product` or one of its subclasses, which is why the container can call `finalPrice()`. A container has a name, a capacity and an `ArrayList<T>`. It must have the following methods:
+
+* `boolean add(T item)` – adds a product; returns `false` if the container is full
+* `int size()`
+* `double totalValue()` – the sum of the final prices
+* `T mostExpensive()` – the product with the highest final price; on a tie, return the first one, and if the container is empty, return `null`
+* `Pair<String, Double> summary()` – returns a pair of (container name, total value)
+* `void print()` – prints `=== NAME (SIZE/CAPACITY) ===`, then all products, then `Total: X`, then `Most expensive: NAME (PRICE)` or `Most expensive: none`
+
+The main class creates three containers:
+
+* a `Container<Food>` named `Fridge`
+* a `Container<Electronics>` named `Tech`
+* a `Container<Product>` named `Overflow`
+
+Food goes into `Fridge` and electronics into `Tech`. If the matching container is full, the product goes into `Overflow`. This works because both `Food` and `Electronics` are a `Product`. If `Overflow` is also full, print `Rejected: NAME`. Casting is not allowed.
+Input:
+
+* the first line contains the capacities of `Fridge`, `Tech` and `Overflow`
+* the second line contains `N`, the number of products
+* then follow `N` lines in the format `F name price days` or `E name price warranty`
+
+Output:
+
+1. the `Rejected` messages (in reading order)
+2. `print()` for `Fridge`, `Tech` and `Overflow`, in that order
+3. `Most valuable container: NAME (TOTAL)`, computed with `summary()` (on a tie, print the first one)
+4. `Top food expires in D days`, if `Fridge` is not empty
+5. `Top electronics warranty: W months`, if `Tech` is not empty
+
+Items 4 and 5 are obtained directly from `mostExpensive()`, without casting.
+````
