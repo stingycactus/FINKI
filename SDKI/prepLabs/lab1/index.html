@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Practice</title>
+    <style>
+        .box {
+            width: 80px;
+            height: 80px;
+            margin: 5px;
+            border: 1px solid black;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", (event) => {
+            console.log("page loaded");
+            const colors = ["red", "yellow", "green", "blue", "purple"];
+            console.log(colors);
+            console.log(colors.toString());
+            let line = "";
+            for (let i = 0; i < colors.length; i++) {
+                line += `${i + 1}. ${colors[i]} `;
+            }
+            console.log(line);
+
+            function parseColors(text) {
+                const parts = text.split(",");
+                let result = [];
+                for (let i = 0; i < parts.length; i++) {
+                    let c = parts[i].trim().toLowerCase();
+                    if (c !== "") {
+                        result.push(c);
+                    }
+                }
+                return result;
+            }
+
+            let sampleText = "red, yellow, green, blue, purple"
+            console.log(parseColors(sampleText));
+
+            function sameSequence(a, b) {
+                if (a.length !== b.length) {
+                    return false;
+                }
+                for (let i = 0; i < a.length; i++) {
+                    if (a[i] !== b[i]) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            console.log(sameSequence(colors, parseColors(sampleText)));
+
+            let boxesCount = document.getElementsByClassName("box").length
+
+            for (let i = 0; i < boxesCount; i++) {
+                document.getElementById("box" + i).style.backgroundColor = colors[i]
+            }
+
+            function makeGray() {
+                document.querySelectorAll(".box").forEach((box) => box.style.backgroundColor = "gray");
+            }
+
+            // makeGray();
+
+            const answer = document.getElementById("answer");
+            const button = document.getElementById("submit");
+
+            button.addEventListener("click", check);
+
+            function check() {
+                const userText = answer.value;
+                const userResult = parseColors(userText);
+                if (sameSequence(colors, userResult)) {
+                    alert("correct");
+                } else {
+                    alert("wrong");
+                }
+            }
+
+            setTimeout(() => {
+                makeGray()
+                answer.disabled = false;
+                button.disabled = false;
+            }, 5000);
+        })
+    </script>
+</head>
+<body>
+<div class="box" id="box0"></div>
+<div class="box" id="box1"></div>
+<div class="box" id="box2"></div>
+<div class="box" id="box3"></div>
+<div class="box" id="box4"></div>
+<input disabled id="answer">
+<button disabled id="submit">Submit</button>
+</body>
+</html>
