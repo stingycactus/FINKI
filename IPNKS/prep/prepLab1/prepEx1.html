@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        const input = prompt("Enter temp followed by C or F (eg. 37C)")
+
+        const s = input.trim().toUpperCase();
+        const unit = s[s.length-1];
+        if (unit !== "C" || unit !== "F") {
+            alert("Invalid unit type");
+        }
+
+        const value = parseFloat(s.slice(0,-1))
+        if (isNaN(value)) {
+            alert("Invalid number");
+        }
+
+        if (unit === "C") {
+            document.writeln(value + " C = " + (value * 9 / 5 + 32) + " F");
+        } else if (unit === "F") {
+            document.writeln(value + " F = " + ((value - 32) * 5 / 9) + " C");
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script>
+    function main() {
+        const input = prompt("Enter a number");
+        let num = parseInt(input);
+        if (isNaN(num)) {
+            alert("NaN");
+            return;
+        }
+        if (num < 1000 || num > 9999) {
+            alert("not 4 digit");
+            return;
+        }
+
+        let temp = num;
+        let reversed = 0;
+        while (temp>0){
+            let ld = temp%10;
+            reversed = reversed * 10 + ld;
+            temp = Math.floor(temp/10);
+        }
+
+        if (num === reversed) {
+            document.write("palindrome");
+        }
+
+        temp = num;
+        let digitSum = 0;
+        while (temp>0) {
+            let ld = temp%10;
+            digitSum+=ld;
+            temp = Math.floor(temp/10);
+        }
+
+        if ((num % digitSum) === 0) {
+            document.write("divisible by sum of its own digits");
+        }
+
+    }
+    main();
+
+</script>
+<body>
+
+</body>
+</html>

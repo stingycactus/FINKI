@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script>
+    let maxSum = -1;
+    let maxNum = null;
+    for (let i = 0; i < 3; i++) {
+        const input = prompt("Enter a number: ");
+        let num = parseInt(input);
+        if (isNaN(num)) {
+            alert("NaN");
+        }
+        if (num<100 || num>999){
+            alert("not three digits");
+        }
+        let temp = num;
+        let digitSum = 0;
+        while(temp>0){
+            let ld = temp%10;
+            digitSum+=ld;
+            temp = Math.floor(temp / 10)
+        }
+        if (digitSum > maxSum) {
+            maxSum = digitSum;
+            maxNum =num;
+        }
+    }
+    document.writeln(maxNum);
+</script>
+<body>
+
+</body>
+</html>
