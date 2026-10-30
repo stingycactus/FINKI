@@ -1,0 +1,66 @@
+<!--
+  Lab 1: Color memory game
+
+  1. Show 5 boxes, each in a different color. The player has 5 seconds to
+     memorize the color sequence; during those 5 seconds the input box is
+     disabled. After 5 seconds, all boxes turn gray and the input unlocks.
+     The player types the colors in order (e.g. yellow, green, blue, black, purple).
+     If the sequence is correct, show alert "ti si pobednik", otherwise "greska".
+  2. Add a Submit button to check the answer.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .box {
+            height: 80px;
+            width: 80px;
+            margin: 10px;
+            border: 1px solid black;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const colors = ["yellow", "green", "blue", "black", "purple"];
+            document.querySelectorAll(".box").forEach((box, i) => box.style.backgroundColor = colors[i]);
+            console.log(document.querySelectorAll(".box"));
+            const answer = document.getElementById("answer");
+            const submit = document.getElementById("submit");
+            setTimeout(() => {
+                makeGray();
+                answer.disabled = false;
+                submit.disabled = false;
+            }, 5000);
+
+            function makeGray() {
+                const boxes = document.getElementsByClassName("box");
+                for (const box of boxes) {
+                    box.style.backgroundColor = "gray";
+                }
+            }
+
+            submit.addEventListener("click", () => {
+                const result = answer.value.trim().toLowerCase().split(/[\s,]+/);
+                console.log(colors.toString());
+                console.log(result.toString());
+                if (colors.toString() === result.toString()) {
+                    alert("ti si pobednik");
+                } else {
+                    alert("greska");
+                }
+            });
+        })
+    </script>
+</head>
+<body>
+<div class="box" id="box0"></div>
+<div class="box" id="box1"></div>
+<div class="box" id="box2"></div>
+<div class="box" id="box3"></div>
+<div class="box" id="box4"></div>
+<input id="answer" disabled>
+<button id="submit" disabled>Submit</button>
+</body>
+</html>
