@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.function.*;
 
 abstract class Vehicle {
     private String plate;
@@ -131,12 +132,7 @@ class Garage {
     }
 
     public void chargeAll() {
-        for (int i = 0; i < count; i++) {
-            if (vehicles[i] instanceof Chargeable) {
-                Chargeable ev = (Chargeable) vehicles[i];
-                ev.charge();
-            }
-        }
+        applyIf(v -> v instanceof Chargeable, v -> ((Chargeable) v).charge());
     }
 
     static class UnknownVehicleTypeException extends Exception {
@@ -145,11 +141,11 @@ class Garage {
         }
     }
 
-    private static final VehicleMaker CAR = (plate, hours) -> new Car(plate,hours);
-    private static final VehicleMaker TRUCK = (plate, hours) -> new Truck(plate, hours);
-    private static final VehicleMaker MOTO = (plate, hours) -> new Motorcycle(plate, hours);
+    private static final BiFunction<String, Integer, Vehicle> CAR = (plate, hours) -> new Car(plate,hours);
+    private static final BiFunction<String, Integer, Vehicle> TRUCK = (plate, hours) -> new Truck(plate, hours);
+    private static final BiFunction<String, Integer, Vehicle> MOTO = (plate, hours) -> new Motorcycle(plate, hours);
 
-    static VehicleMaker getMaker(char type) throws UnknownVehicleTypeException {
+    static BiFunction<String, Integer, Vehicle> getMaker(char type) throws UnknownVehicleTypeException {
         if (type == 'C') {
             return CAR;
         } else if (type == 'T') {
@@ -159,12 +155,61 @@ class Garage {
         }
         throw new UnknownVehicleTypeException(type);
     }
-}
 
-interface VehicleMaker {
-    Vehicle make(String plate, int hours);
-}
+    void forEach(Consumer<Vehicle> action) {
+        for (int i = 0; i < count; i++) {
+            action.accept(vehicles[i]);
+        }
+    }
 
+    int count(Predicate<Vehicle> condition) {
+        int totalCount = 0;
+        for (int i = 0; i < count; i++) {
+            if (condition.test(vehicles[i])){
+                totalCount++;
+            }
+        }
+        return totalCount;
+    }
+
+    Vehicle findFirst(Predicate<Vehicle> condition) {
+        for (int i = 0; i < count; i++) {
+            if (condition.test(vehicles[i])) {
+                return vehicles[i];
+            }
+        }
+        return null;
+    }
+
+    Vehicle[] filter(Predicate<Vehicle> condition) {
+        int newCount = count(condition);
+        Vehicle[] result = new Vehicle[newCount];
+        int j = 0;
+        for (int i = 0; i < count; i++) {
+            if (condition.test(vehicles[i])) {
+                result[j++]=vehicles[i];
+            }
+        }
+        return result;
+    }
+
+    String[] mapToLabels(Function<Vehicle, String> mapper) {
+        String[] labels = new String[count];          // 1. one slot per vehicle
+        for (int i = 0; i < count; i++) {
+            labels[i] = mapper.apply(vehicles[i]);    // 2. store each result
+        }
+        return labels;                                // 3. hand the array back
+    }
+
+    void applyIf(Predicate<Vehicle> condition, Consumer<Vehicle> action) {
+        for (int i = 0; i < count; i++) {
+            if (condition.test(vehicles[i])){
+                action.accept(vehicles[i]);
+            }
+        }
+    }
+
+}
 
 class Motorcycle extends Vehicle {
     private static final double RATE = 1;
@@ -205,7 +250,7 @@ public class Main {
 //        }
 
 
-//        Scanner in = new Scanner(System.in);
+        Scanner in = new Scanner(System.in);
 //        while (true) {
 //            String line = in.nextLine();
 //            String[] parts = line.trim().split("\\s+");
@@ -232,12 +277,32 @@ public class Main {
         };
 
         try {
-            Vehicle v = Garage.getMaker('C').make("SK1", 3);
+            Vehicle v = Garage.getMaker('C').apply("SK1", 3);
             System.out.println(v);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-//      stopped at 2.3 from the .md
 
+        Supplier<Vehicle> s = () -> {
+            String line = in.nextLine().trim();
+            String[] parts = line.split("\\s+");
+            char type = parts[0].charAt(0);
+            String plate = parts[1];
+            int hours = Integer.parseInt(parts[2]);
+            try {
+                Vehicle v = Garage.getMaker(type).apply(plate, hours);
+                return v;
+            } catch (Garage.UnknownVehicleTypeException e) {
+                System.out.println(e.getMessage());
+                return null;
+            }
+        };
+
+        int n = Integer.parseInt(in.nextLine().trim());
+        for (int i = 0; i < n; i++) {
+            g.park(s.get());
+        }
+        g.printAll();
+        g.forEach(v -> System.out.println(v.getPlate()));
     }
 }
