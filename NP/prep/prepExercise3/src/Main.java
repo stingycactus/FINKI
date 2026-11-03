@@ -1,5 +1,7 @@
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 class Bag<T> {
     private ArrayList<T> items;
@@ -128,6 +130,12 @@ class RankedBag<T> {
     @Override
     public String toString() {
         return entries.toString();
+    }
+}
+
+class Transform {
+    public static <E extends Comparable<E>> List<E> applyAndSort(List<E> list, Function<E, E> f){
+        return list.stream().map(f).sorted().collect(Collectors.toList());
     }
 }
 

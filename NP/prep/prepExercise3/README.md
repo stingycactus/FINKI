@@ -160,6 +160,34 @@ Test:
 - drawing many times from `Dexter, Seinfeld, Barney, Sheldon, Costanza, Hank` only ever prints those names
 - `drawItem()` doesn't remove anything (`isEmpty()` stays `false`)
 
+Sample `main` (the draws are random, so run it a few times):
+
+```java
+public static void main(String[] args) {
+    Box<String> stringBox = new Box<>();
+    System.out.println(stringBox.drawItem());     // null: empty box
+
+    stringBox.add("Dexter");
+    stringBox.add("Seinfeld");
+    stringBox.add("Barney");
+    stringBox.add("Sheldon");
+    stringBox.add("Costanza");
+    stringBox.add("Hank");
+    for (int i = 0; i < 5; i++) {
+        System.out.println(stringBox.drawItem()); // one of the six names each time
+    }
+    System.out.println(stringBox.isEmpty());      // false: drawItem doesn't remove
+
+    Box<Integer> intBox = new Box<>();
+    intBox.add(23);
+    intBox.add(15);
+    intBox.add(19);
+    intBox.add(3);
+    intBox.add(92);
+    System.out.println(intBox.drawItem());        // one of 23, 15, 19, 3, 92
+}
+```
+
 ## 2.2 Task 2: Priority Queue (= 1.4)
 
 `PriorityQueue<T>` on `ArrayList`: `add(item, priority)`, and `remove()` returning the highest priority (`null` if empty).
@@ -182,6 +210,39 @@ Tests (`remove()` calls, in order):
 | `C 3`, `B 2`, `A 1` (descending) | `C B A` |
 | `first 5`, `second 5`, `low 1`, `third 5` (ties) | `first second third low` |
 
+Sample `main` (runs all four rows, plus an `Integer` queue):
+
+```java
+public static void main(String[] args) {
+    PriorityQueue<String> q = new PriorityQueue<>();
+    q.add("X", 10);
+    q.add("Y", 1);
+    q.add("Z", 3);
+    System.out.println(q.remove() + " " + q.remove() + " " + q.remove() + " " + q.remove());   // X Z Y null
+
+    q.add("A", 1);
+    q.add("B", 2);
+    q.add("C", 3);
+    System.out.println(q.remove() + " " + q.remove() + " " + q.remove());                      // C B A
+
+    q.add("C", 3);
+    q.add("B", 2);
+    q.add("A", 1);
+    System.out.println(q.remove() + " " + q.remove() + " " + q.remove());                      // C B A
+
+    q.add("first", 5);
+    q.add("second", 5);
+    q.add("low", 1);
+    q.add("third", 5);
+    System.out.println(q.remove() + " " + q.remove() + " " + q.remove() + " " + q.remove());   // first second third low
+
+    PriorityQueue<Integer> nums = new PriorityQueue<>();
+    nums.add(100, 2);
+    nums.add(200, 9);
+    System.out.println(nums.remove() + " " + nums.remove());                                   // 200 100
+}
+```
+
 ## 2.3 Task 3: Standard deviation (= 1.3)
 
 `MyMathClass.standardDeviation(ArrayList<? extends Number>)`: first the mean, then the square root of the average squared distance from it (divide by `N`, not `N - 1`).
@@ -193,15 +254,72 @@ Tests (`remove()` calls, in order):
 | `2 4 4 4 5 5 7 9` (your 1.3 bag) | `STD: 2.00` |
 | empty list | `STD: NaN` (the posted solution doesn't guard it) |
 
+Sample `main` (needs `import java.util.Arrays;`):
+
+```java
+public static void main(String[] args) {
+    ArrayList<Integer> ints = new ArrayList<>(Arrays.asList(1, 10, 20, 30, 40, 50));
+    System.out.println(String.format("STD: %.2f", MyMathClass.standardDeviation(ints)));     // STD: 16.84
+
+    ArrayList<Double> doubles = new ArrayList<>(Arrays.asList(3.4));
+    System.out.println(String.format("STD: %.2f", MyMathClass.standardDeviation(doubles)));  // STD: 0.00
+
+    ArrayList<Integer> bag = new ArrayList<>(Arrays.asList(2, 4, 4, 4, 5, 5, 7, 9));
+    System.out.println(String.format("STD: %.2f", MyMathClass.standardDeviation(bag)));      // STD: 2.00
+
+    ArrayList<Double> two = new ArrayList<>(Arrays.asList(1.5, 2.5));
+    System.out.println(String.format("STD: %.2f", MyMathClass.standardDeviation(two)));      // STD: 0.50
+
+    System.out.println(String.format("STD: %.2f", MyMathClass.standardDeviation(new ArrayList<Integer>())));   // STD: NaN
+}
+```
+
 ## 2.4 Task 4: ArrayList vs arrays (= 1.1)
 
 Theory only: the three reasons in 1.1 (slower, no `[]`, no primitives) and that it grows by copying an internal array.
 
 ## 2.5 Task 5: ExecuteAndSort (= 1.5, 1.6)
 
-`static <E extends Comparable> List<E> execute(List<E> elements, Function<E, E> function)`: apply the function to every element, return the results sorted **descending** (`sorted(Comparator.reverseOrder())`). In the given `ExecuteAndSortTest.main`, the TODO parts are the three lambdas.
+The aud's task, reworded as an exam statement. Do the steps in order.
 
-Input format: test case (`1` students, `2` integers), then `n`; for students, a scenario line (`1` add `_FCSE`, `2` remap grades), then `n` lines of `ID grade grade ...`; for integers, `n` lines with one number each.
+**What's given** (copy from the aud, don't change):
+- **`Student implements Comparable<Student>`** with:
+  - fields `String id` and `List<Integer> grades`
+  - `double average()`, `int getYear()`, `int totalCourses()`, `double labAssistantPoints()`
+  - `compareTo`: students are compared by `labAssistantPoints()`, and on a tie by `average()`
+  - `toString()` in the required output format
+- **`ExecuteAndSortTest.main`**, which reads the input and creates either a `List<Student>` or a `List<Integer>`. It's the task's own `main`, so there's no separate sample `main` here: run it with Redirect input and the examples below.
+
+**Step 1: `Student.mapGrades`.** Implement `public static List<Integer> mapGrades(List<Integer> grades)`. It returns a **new** list in which every grade is converted to the new grading system: `10 → 1`, `9 → 2`, `8 → 3`, `7 → 4`, `6 → 5`. The input list must not be modified. *Hint:* every pair adds up to 11. Use a loop or a stream `map` (1.6).
+
+**Step 2: `ExecuteAndSort.execute`.** Create a class `ExecuteAndSort` with a **static generic method** `execute`:
+- **Type parameter:** `E`, restricted to types that are `Comparable` (so they can be sorted).
+- **Parameters:** `List<E> elements` (the objects) and `Function<E, E> function` (takes an `E`, returns an `E`).
+- **Returns:** a `List<E>` with the result of applying `function` to **every** element, sorted in **descending** order (largest first, by `compareTo`).
+
+*Hint:* it's your `Transform.applyAndSort` from 1.6, with `sorted(Comparator.reverseOrder())` instead of `sorted()`.
+
+**Step 3: the three TODO calls in `main`.** In each case, call `ExecuteAndSort.execute` with the list and a **lambda** for the function, store the result back in the same variable, and print it with `System.out.println(list)`.
+1. **Students, scenario 1:** every student's `id` gets the suffix `_FCSE` (`211001` → `211001_FCSE`).
+2. **Students, scenario 2:** every student's grades are converted with `Student.mapGrades`.
+3. **Integers:** every number under `100` becomes 10 times larger, and every number `100` or above 2 times larger.
+
+For 1 and 2, the lambda receives a `Student` and must return a `Student`. Either change the student's field and return the same student (the aud's way), or build a new `Student` with the changed value.
+
+**Input format:**
+```text
+TEST_CASE          (1 = students, 2 = integers)
+N                  (number of elements)
+SCENARIO           (only for students: 1 = add _FCSE, 2 = map grades)
+N lines:           students: ID GRADE GRADE ...   |   integers: one number per line
+```
+
+**Checklist before you run:**
+- `execute` is `static` and generic, with the bound before the return type: `<E extends Comparable<E>>`.
+- It sorts **descending**: `Comparator.reverseOrder()`, not plain `sorted()`.
+- It collects with `Collectors.toList()` (not `.toList()`, which is Java 16+).
+- Imports: `java.util.*`, `java.util.function.Function`, `java.util.stream.Collectors`.
+- Each lambda returns the right type: `Student` → `Student`, `Integer` → `Integer`.
 
 **Integers** (×10 if under 100, otherwise ×2):
 
