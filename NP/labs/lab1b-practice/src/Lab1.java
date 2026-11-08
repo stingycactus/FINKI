@@ -100,7 +100,8 @@ class ParkingLot {
     public double totalChargingFees() {
         double total = 0;
         for (int i = 0; i < ticketCount; i++) {
-            if (tickets[i] instanceof Chargeable c) {
+            if (tickets[i] instanceof Chargeable) {
+                Chargeable c = (Chargeable) tickets[i];
                 total += c.chargingFee();
             }
         }
