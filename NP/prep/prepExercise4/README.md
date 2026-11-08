@@ -4,7 +4,7 @@
 
 Part 1 builds one practice project, a **running club**: runners in a club, sorted and filtered several ways, then race results and a training log read from input. Each exercise extends the previous one. Part 2 has each Aud 4 task: the original text, a lab-style spec of what to implement, the given test `main`, and test inputs with verified expected output.
 
-Setup: new IntelliJ module `prepExercise4`, everything in `src/Main.java`, only `Main` is `public`. Keep earlier test code in `main` (comment it out) so you can re-run it. For reading input: Run → Edit Configurations → **Redirect input from** → pick a `.txt` file in the module folder.
+Setup: new IntelliJ module `prepExercise4`, everything in `src/Main.java`, only `Main` is `public`. Keep earlier test code in `main` (comment it out) so you can re-run it. For the sections that read input (1.6–1.9): run `main`, paste the given input into the Run console, then press **Ctrl+D** to end the input (the same way the aud tests read `System.in`).
 
 ---
 
@@ -17,9 +17,42 @@ Setup: new IntelliJ module `prepExercise4`, everything in `src/Main.java`, only 
 - `getList()` in Car returns the field itself, not a copy. The test calls `sortByPrice(...)` and then prints `getList()`, so it has to see the sorted order.
 
 **Exercise:**
-1. `class Runner` with `private String name, club; private int age; private float weeklyKm;`, constructor `Runner(String name, String club, int age, float weeklyKm)`, getters, and `toString()` → `String.format("%s (%s) %d %.1fkm", name, club, age, weeklyKm)`.
-2. `class RunClub` with `private List<Runner> runners`, `public void addRunner(Runner r)` and `public List<Runner> getList()`.
-3. In `main`, add these 6 runners in this order and print `getList()` one per line (`float` literals need `f`: `31.5f`):
+
+**In class `Runner` implement:**
+- `private String name; private String club; private int age; private float weeklyKm;`
+- `public Runner(String name, String club, int age, float weeklyKm)` – stores the four values.
+- `public String getName()`, `public String getClub()`, `public int getAge()`, `public float getWeeklyKm()`
+- `public String toString()` – returns `String.format("%s (%s) %d %.1fkm", name, club, age, weeklyKm)`, e.g. `Ana (Vardar) 24 31.5km`.
+
+**In class `RunClub` implement:**
+- `private List<Runner> runners = new ArrayList<>();`
+- `public void addRunner(Runner r)` – adds `r` to the end of the list.
+- `public List<Runner> getList()` – returns the list itself, not a copy.
+
+**Test** (`Main`, reused by every later section):
+```java
+public class Main {
+    static RunClub sampleClub() {
+        RunClub club = new RunClub();
+        club.addRunner(new Runner("Ana", "Vardar", 24, 31.5f));
+        club.addRunner(new Runner("Marko", "Rabotnicki", 31, 42.0f));
+        club.addRunner(new Runner("Bojan", "vardar", 24, 18.5f));
+        club.addRunner(new Runner("Elena", "Rabotnicki", 19, 42.0f));
+        club.addRunner(new Runner("Ana", "Vardar", 22, 27.0f));
+        club.addRunner(new Runner("Ivan", "Skopje", 45, 12.0f));
+        return club;
+    }
+
+    static void print(List<?> items) {
+        for (Object item : items) System.out.println(item);
+    }
+
+    public static void main(String[] args) {
+        print(sampleClub().getList());
+    }
+}
+```
+Expected:
    ```text
    Ana (Vardar) 24 31.5km
    Marko (Rabotnicki) 31 42.0km
@@ -51,9 +84,21 @@ class NameAndAgeComparator implements Comparator<Runner> {
 ```
 
 **Exercise:**
-1. Write `NameAndAgeComparator` (above).
-2. `public void printByClub(String club)`: collect the runners whose club matches (case-insensitive) into a **new** list, sort it with the comparator, then print each one.
-3. `printByClub("vardar")`, `printByClub("RABOTNICKI")`, `printByClub("Pelister")`, with `--` printed after each call:
+
+**In class `NameAndAgeComparator implements Comparator<Runner>` implement:**
+- `public int compare(Runner o1, Runner o2)` – by name A→Z (`compareTo`); if the names are equal, by age, youngest first (`Integer.compare`).
+
+**In class `RunClub` implement:**
+- `public void printByClub(String club)` – collects every runner whose club equals `club` **ignoring case** into a new list, sorts it with `NameAndAgeComparator`, and prints one `toString()` per line (`println`). Prints nothing if no runner matches. Doesn't change the order of `runners`.
+
+**Test:**
+```java
+RunClub club = sampleClub();
+club.printByClub("vardar");     System.out.println("--");
+club.printByClub("RABOTNICKI"); System.out.println("--");
+club.printByClub("Pelister");   System.out.println("--");
+```
+Expected:
    ```text
    Ana (Vardar) 22 27.0km
    Ana (Vardar) 24 31.5km
@@ -74,9 +119,20 @@ class NameAndAgeComparator implements Comparator<Runner> {
 - Trap when chaining: `Comparator.comparing(r -> r.getAge()).reversed()` doesn't compile (`cannot find symbol: method getAge() ... variable r of type Object`). Chaining hides the type from the lambda. Use a method reference `Runner::getAge` or a typed lambda `(Runner r) -> r.getAge()`.
 
 **Exercise:**
-1. `AgeAndKmComparator`: by age, ties by `weeklyKm` (both ascending).
-2. `public void sortByAge(boolean ascending)`: sorts `runners` itself; descending uses `.reversed()`.
-3. `sortByAge(true)`, print `getList()`; then `sortByAge(false)`, print again:
+
+**In class `AgeAndKmComparator implements Comparator<Runner>` implement:**
+- `public int compare(Runner o1, Runner o2)` – by age, youngest first; equal ages by `weeklyKm`, smallest first (`Float.compare`).
+
+**In class `RunClub` implement:**
+- `public void sortByAge(boolean ascending)` – sorts `runners` **itself** (the club's own order changes). `true`: with `AgeAndKmComparator`. `false`: the exact reverse with `.reversed()`, so equal ages are by `weeklyKm` descending too.
+
+**Test:**
+```java
+RunClub club = sampleClub();
+club.sortByAge(true);  System.out.println("ASC");  print(club.getList());
+club.sortByAge(false); System.out.println("DESC"); print(club.getList());
+```
+Expected:
    ```text
    ASC
    Elena (Rabotnicki) 19 42.0km
@@ -94,7 +150,7 @@ class NameAndAgeComparator implements Comparator<Runner> {
    Elena (Rabotnicki) 19 42.0km
    ```
    The two age-24 runners swap, which is the reversed tie-break.
-4. Rewrite the comparator with `Comparator.comparing(...).thenComparing(...)`. The output must not change.
+Then rewrite `sortByAge` with `Comparator.comparing(Runner::getAge).thenComparing(Runner::getWeeklyKm)` instead of the class. The output must not change.
 
 ## 1.4 Returning a new sorted list: top N and filter (Aud 4 task 1 `getCheapestN`, task 2 `filterByManufacturer`)
 
@@ -104,10 +160,23 @@ class NameAndAgeComparator implements Comparator<Runner> {
 - **Aud streams version** (`getCheapestNWithStreams`): `stream().sorted(cmp).limit(n).collect(Collectors.toList())`. `limit(n)` already stops at the list size, and `sorted` doesn't touch the original list.
 
 **Exercise:**
-1. `KmDescComparator`: `weeklyKm` descending, ties by name ascending.
-2. `public List<Runner> getTopN(int n)` with a loop and `Math.min`.
-3. `public List<Runner> filterByClub(String club)`: case-insensitive, sorted by `NameAndAgeComparator`. Write it with a stream: `filter`, `sorted`, `collect`.
-4. Print `getTopN(3)`, then `getTopN(10).size()`, then `filterByClub("rabotnicki")`, then `getList()`:
+
+**In class `KmDescComparator implements Comparator<Runner>` implement:**
+- `public int compare(Runner o1, Runner o2)` – by `weeklyKm`, most km first (`Float.compare(o2..., o1...)`); equal km by name A→Z.
+
+**In class `RunClub` implement:**
+- `public List<Runner> getTopN(int n)` – returns a **new** list with the `n` runners with the most `weeklyKm`, in `KmDescComparator` order. If there are fewer than `n` runners, returns all of them. Sort a copy, so `runners` keeps its order. Use a loop to `Math.min(n, size)`.
+- `public List<Runner> filterByClub(String club)` – returns a **new** list of the runners whose club equals `club` ignoring case, sorted with `NameAndAgeComparator`; an empty list if none match. Write it with a stream: `filter`, `sorted`, `collect(Collectors.toList())`.
+
+**Test:**
+```java
+RunClub club = sampleClub();
+System.out.println("TOP 3");  print(club.getTopN(3));
+System.out.println("TOP 10: " + club.getTopN(10).size());
+System.out.println("FILTER"); print(club.filterByClub("rabotnicki"));
+System.out.println("LIST");   print(club.getList());
+```
+Expected:
    ```text
    TOP 3
    Elena (Rabotnicki) 19 42.0km
@@ -120,10 +189,14 @@ class NameAndAgeComparator implements Comparator<Runner> {
    LIST
    Ana (Vardar) 24 31.5km
    Marko (Rabotnicki) 31 42.0km
-   ...
+   Bojan (vardar) 24 18.5km
+   Elena (Rabotnicki) 19 42.0km
+   Ana (Vardar) 22 27.0km
+   Ivan (Skopje) 45 12.0km
    ```
    `LIST` must still be in insertion order, not sorted.
-5. Break it: loop `i < n` instead of `Math.min` and call `getTopN(10)`: `IndexOutOfBoundsException: Index 6 out of bounds for length 6`.
+
+Break it: loop `i < n` instead of `Math.min` and call `getTopN(10)`: `IndexOutOfBoundsException: Index 6 out of bounds for length 6`.
 
 ## 1.5 Sets: `TreeSet` and `HashSet` (Aud 4 task 1, `BooksTest.fillCollection`)
 
@@ -133,8 +206,20 @@ class NameAndAgeComparator implements Comparator<Runner> {
 - Trap: a `TreeSet<String>` is case-sensitive, so `Vardar` and `vardar` are **two** entries. Because `printByCategory` matches case-insensitively, the books of that group are printed **twice**. That's how the given test behaves, so your output must match it.
 
 **Exercise:**
-1. `public Set<String> getClubs()`: a `TreeSet` with every runner's club.
-2. Print `getClubs()`, then loop over it: `"CLUB: " + club` and `printByClub(club)`:
+
+**In class `RunClub` implement:**
+- `public Set<String> getClubs()` – returns a `TreeSet<String>` with the club of every runner: each club once, sorted. Case-sensitive, so `Vardar` and `vardar` are both in it.
+
+**Test:**
+```java
+RunClub club = sampleClub();
+System.out.println(club.getClubs());
+for (String c : club.getClubs()) {
+    System.out.println("CLUB: " + c);
+    club.printByClub(c);
+}
+```
+Expected:
    ```text
    [Rabotnicki, Skopje, Vardar, vardar]
    CLUB: Rabotnicki
@@ -151,7 +236,7 @@ class NameAndAgeComparator implements Comparator<Runner> {
    Ana (Vardar) 24 31.5km
    Bojan (vardar) 24 18.5km
    ```
-3. Switch to `HashSet` and print it: same 4 clubs, order not guaranteed.
+Then switch `getClubs()` to a `HashSet` and print it: the same 4 clubs, order not guaranteed.
 
 ## 1.6 Reading from standard input (Aud 4 tasks 1–2 with `Scanner`, tasks 3–4 with `BufferedReader`)
 
@@ -169,10 +254,34 @@ public void readRunners(InputStream in) {
 ```
 
 **Exercise:**
-1. Put the 6 runners in `runners.txt` in the module folder, one per line: `Ana Vardar 24 31.5`.
-2. `public static Runner createRunner(String line)` in `Runner` (`Integer.parseInt`, `Float.parseFloat`), then `readRunners` (above).
-3. Replace the 6 `addRunner` calls in `main` with `club.readRunners(System.in)` and redirect input from `runners.txt`. Re-run 1.2–1.5: every output must be identical.
-4. Write `readRunnersScanner(InputStream in)` with a `Scanner` loop and `addRunner`. Same output again.
+
+**Input:** one runner per line: `name club age weeklyKm`, separated by spaces:
+```text
+Ana Vardar 24 31.5
+Marko Rabotnicki 31 42.0
+Bojan vardar 24 18.5
+Elena Rabotnicki 19 42.0
+Ana Vardar 22 27.0
+Ivan Skopje 45 12.0
+```
+
+**In class `Runner` implement:**
+- `public static Runner createRunner(String line)` – splits `line` on spaces (`split("\\s+")`): part 0 = name, 1 = club, 2 = age (`Integer.parseInt`), 3 = weeklyKm (`Float.parseFloat`). Returns the new `Runner`.
+
+**In class `RunClub` implement:**
+- `public void readRunners(InputStream in)` – reads every line of `in` with a `BufferedReader` and **replaces** `runners` with one `Runner` per line (via `createRunner`), in input order (code above).
+- `public void readRunnersScanner(InputStream in)` – the same with a `Scanner` loop: `while (sc.hasNextLine())`, read the line with `nextLine()`, `addRunner(Runner.createRunner(line))`. This one **adds** to the existing list.
+
+**Test** (run, paste the input, Ctrl+D):
+```java
+RunClub club = new RunClub();
+club.readRunners(System.in);
+print(club.getList());
+System.out.println(club.getClubs());
+```
+Expected: the same 6 lines as 1.1, then `[Rabotnicki, Skopje, Vardar, vardar]`. Then swap in `readRunnersScanner`: same output again.
+
+`System.in` can only be read once per run, so read it once and reuse that `club`.
 
 ## 1.7 `Comparable` on parsed times (Aud 4 task 3, `Driver`)
 
@@ -182,23 +291,46 @@ public void readRunners(InputStream in) {
 - Best of several: loop and keep the smallest, comparing by **seconds**.
 
 **Exercise:**
-1. `class RaceResult implements Comparable<RaceResult>` with `String name`, `List<String> splits`, a `static RaceResult createResult(String line)` and `private static int toSeconds(String split)` (`split(":")`).
-2. `public String getBestSplit()` (the smallest by seconds), and `compareTo` comparing the best splits' seconds with `Integer.compare`.
-3. In `RunClub`: `List<RaceResult> results` and `void readRace(InputStream in)`. Put this in `race.txt`:
-   ```text
-   Ana 4:55 5:02 4:49
-   Marko 4:40 4:52 4:47
-   Ivan 10:15 9:58 10:02
-   Elena 4:41 4:39 4:50
-   ```
-   After `Collections.sort`, print `name + " " + getBestSplit()`:
-   ```text
-   Elena 4:39
-   Marko 4:40
-   Ana 4:49
-   Ivan 9:58
-   ```
-4. Break it: pick the best with `s.compareTo(best) < 0` instead of seconds. Ivan's best becomes `10:02`.
+
+**Input:** each line is a runner's name followed by their 1 km split times, each in the format `m:ss` (minutes:seconds):
+```text
+Ana 4:55 5:02 4:49
+Marko 4:40 4:52 4:47
+Ivan 10:15 9:58 10:02
+Elena 4:41 4:39 4:50
+```
+
+**In class `RaceResult implements Comparable<RaceResult>` implement:**
+- `private String name; private List<String> splits;` – the splits stay as the original strings (`"4:49"`).
+- `public RaceResult(String name, List<String> splits)` – stores both.
+- `public static RaceResult createResult(String line)` – splits `line` on spaces. Part 0 is the name; every part after it is one split, added to a new `List<String>`. Returns `new RaceResult(name, splits)`.
+- `private static int toSeconds(String split)` – converts `"m:ss"` to seconds with `split(":")`: `"4:49"` → `289`, `"10:02"` → `602`.
+- `public String getName()`
+- `public String getBestSplit()` – returns the fastest split (smallest `toSeconds`) as its **original string**, e.g. `"4:49"`.
+- `public int compareTo(RaceResult other)` – by best split in seconds, fastest first (`Integer.compare`).
+- `public String toString()` – returns `name + " " + getBestSplit()`.
+
+**In class `RunClub` implement:**
+- `private List<RaceResult> results = new ArrayList<>();`
+- `public void readRace(InputStream in)` – reads every line with a `BufferedReader`, one `RaceResult` per line (via `createResult`), into `results`.
+- `public List<RaceResult> getResults()` – returns `results`.
+
+**Test** (run, paste the input, Ctrl+D):
+```java
+RunClub club = new RunClub();
+club.readRace(System.in);
+Collections.sort(club.getResults());
+print(club.getResults());
+```
+Expected:
+```text
+Elena 4:39
+Marko 4:40
+Ana 4:49
+Ivan 9:58
+```
+
+Break it: in `getBestSplit`, pick the best with `s.compareTo(best) < 0` (string comparison) instead of seconds. Ivan's best becomes `10:02`.
 
 ## 1.8 Writing to an `OutputStream` with fixed widths (Aud 4 task 3 `printSorted`, task 4 `writeDailyStats`)
 
@@ -208,15 +340,24 @@ public void readRunners(InputStream in) {
 - Widths: `%-10s` = 10 characters, left-aligned; `%10s` = 10 characters, right-aligned; `%6.2f` = 6 characters in total with 2 decimals; `%3d` = an int in 3 characters.
 
 **Exercise:**
-1. `public void printRace(OutputStream out)`: sort, then print each result as `String.format("%d. %-10s%8s", rank, name, bestSplit)`, ranks from 1.
-2. Call `printRace(System.out)` with `race.txt` (the spaces matter):
+
+**In class `RunClub` implement:**
+- `public void printRace(OutputStream out)` – sorts `results` (natural order, `Collections.sort`), then writes one line per result to `out` through a `PrintWriter`: `String.format("%d. %-10s%8s", rank, name, bestSplit)`, with ranks starting at 1. Calls `flush()` at the end, never `close()`.
+
+**Test** (same input as 1.7):
+```java
+RunClub club = new RunClub();
+club.readRace(System.in);
+club.printRace(System.out);
+```
+Expected (the spaces matter):
    ```text
    1. Elena         4:39
    2. Marko         4:40
    3. Ana           4:49
    4. Ivan          9:58
    ```
-3. Break it twice: remove `flush()` (nothing is printed); then add `pw.close()` and a `System.out.println("after")` in `main` after the call (`after` never appears).
+Break it twice: remove `flush()` (nothing is printed); then add `pw.close()` and a `System.out.println("after")` in `main` after the call (`after` never appears).
 
 ## 1.9 Converting units and min/max/avg statistics (Aud 4 task 4, `DailyTemperatures`)
 
@@ -227,15 +368,36 @@ public void readRunners(InputStream in) {
 - Sort by the key: make the line class `Comparable` by day, then sort a copy.
 
 **Exercise:**
-1. `class DayLog implements Comparable<DayLog>`: `int day`, `List<Double> km`, `static DayLog createDayLog(String line)`. Values are `5km` or `3.1mi`, and miles are stored as km (`× 1.609344`). `compareTo` is by day.
-2. `public String stats(char unit)` (`'K'` or `'M'`): convert into a new list, then return `String.format("%3d: Count: %2d Min: %6.2f%s Max: %6.2f%s Avg: %6.2f%s", ...)` with `km`/`mi` as the unit.
-3. In `RunClub`: `readLog(InputStream)` and `writeLogStats(OutputStream out, char unit)`, sorted by day (1.8 rules). `log.txt`:
-   ```text
-   12 5km 3.1mi 10km
-   3 8.5km
-   7 2mi 4mi
-   ```
-   Print with `'K'`, then `'M'`, then `'M'` again:
+
+**Input:** each line is a day number followed by any number of distances run that day, each ending in `km` or `mi`:
+```text
+12 5km 3.1mi 10km
+3 8.5km
+7 2mi 4mi
+```
+
+**In class `DayLog implements Comparable<DayLog>` implement:**
+- `static final double KM_PER_MILE = 1.609344;`
+- `private int day; private List<Double> km;` – every distance stored in km.
+- `public DayLog(int day, List<Double> km)` – stores both.
+- `public static DayLog createDayLog(String line)` – splits on spaces. Part 0 is the day (`Integer.parseInt`). For every other part: cut off the last 2 characters (the unit) with `substring`, parse the rest with `Double.parseDouble`, multiply by `KM_PER_MILE` if the part ended in `mi`, and add it to the list.
+- `public int compareTo(DayLog other)` – by day, ascending.
+- `public String stats(char unit)` – `unit` is `'K'` (km) or `'M'` (miles). Builds a **new** list of the values in that unit (divide by `KM_PER_MILE` for `'M'`), computes count, min, max and average, and returns `String.format("%3d: Count: %2d Min: %6.2f%s Max: %6.2f%s Avg: %6.2f%s", day, count, min, u, max, u, avg, u)`, where `u` is `"km"` or `"mi"`. Never changes `km`.
+
+**In class `RunClub` implement:**
+- `private List<DayLog> logs = new ArrayList<>();`
+- `public void readLog(InputStream in)` – one `DayLog` per line (via `createDayLog`), into `logs`.
+- `public void writeLogStats(OutputStream out, char unit)` – writes `stats(unit)` for every day, sorted by day, one per line through a `PrintWriter`; `flush()` at the end.
+
+**Test** (run, paste the input, Ctrl+D):
+```java
+RunClub club = new RunClub();
+club.readLog(System.in);
+System.out.println("=== km ===");       club.writeLogStats(System.out, 'K');
+System.out.println("=== mi ===");       club.writeLogStats(System.out, 'M');
+System.out.println("=== mi again ==="); club.writeLogStats(System.out, 'M');
+```
+Expected:
    ```text
    === km ===
      3: Count:  1 Min:   8.50km Max:   8.50km Avg:   8.50km
@@ -248,7 +410,7 @@ public void readRunners(InputStream in) {
    === mi again ===
    (same as === mi ===)
    ```
-4. Break it: in `stats`, overwrite `km` with the converted list. The second `mi` block shrinks: day 3 shows `3.28mi`.
+Break it: in `stats`, overwrite `km` with the converted list. The second `mi` block shrinks: day 3 shows `3.28mi`.
 
 ---
 
