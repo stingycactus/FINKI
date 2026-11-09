@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function getDomain(url) {
+            return url.toLowerCase()
+                .replace(/^https?:\/\//, "")
+                .replace(/^www\./, "")
+                .replace(/[\/?#:].*$/, "");
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>
