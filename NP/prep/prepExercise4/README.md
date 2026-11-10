@@ -416,7 +416,7 @@ Break it: in `stats`, overwrite `km` with the converted list. The second `mi` bl
 
 # 2. The auds
 
-After Part 1, every Aud 4 mechanic is already in your practice project. Each task below lists what to implement, the given test `main` (from the course repo, without `package`), and verified test cases. Run each in its own module or file, with only the test class `public`.
+After Part 1, every Aud 4 mechanic is already in your practice project. Each task below lists what to implement, including the test class's `main` (write it yourself from the spec), the course's own test `main` to check against (collapsed, from the course repo, without `package`), and verified test cases. Run each in its own module or file, with only the test class `public`.
 
 ## Aud 4 task 1: Book (= 1.1, 1.2, 1.4, 1.5, 1.6)
 
@@ -441,7 +441,17 @@ After Part 1, every Aud 4 mechanic is already in your practice project. Each tas
 - `public void printByCategory(String category)` – matching category, case-insensitive; sorted by title, then price; one `toString()` per line.
 - `public List<Book> getCheapestN(int n)` – a **new** list sorted by price, ties by title. At most `n` books, all of them if there are fewer. Doesn't reorder the collection.
 
-<details><summary>Given test: BooksTest</summary>
+**In class `public class BooksTest` implement `public static void main(String[] args)`:**
+1. Create a `Scanner` on `System.in`. Read the integer `n` from the first line with `nextInt()`, then call `nextLine()` once to skip the rest of that line.
+2. Create an empty `BookCollection`.
+3. Read every remaining line until the input ends (`hasNext()` / `nextLine()`). Each line has the format `title:category:price`, separated by `:`. Titles can contain spaces, so split on `":"`, not on spaces. Create a `Book` (price with `Float.parseFloat`) and add it with `addBook`. Also add each category to a `TreeSet<String>`, so every category appears once, sorted (case-sensitive).
+4. Print `=== PRINT BY CATEGORY ===`.
+5. For each category in the set: print `CATEGORY: ` + category, then call `printByCategory(category)`.
+6. Print `=== TOP N BY PRICE ===`, then each book of `getCheapestN(n)`, one `toString()` per line.
+
+Optional helpers: `static void print(List<Book> books)` and `static TreeSet<String> fillCollection(Scanner scanner, BookCollection collection)` (step 3, returns the set).
+
+<details><summary>Reference test main from the course repo: BooksTest</summary>
 
 ```java
 import java.util.*;
@@ -558,7 +568,18 @@ Dune (SciFi) 12.50
 - `public List<Car> filterByManufacturer(String manufacturer)` – a new list, case-insensitive match, sorted by model ascending.
 - `public List<Car> getList()` – the collection's list (in its current, possibly sorted, order).
 
-<details><summary>Given test: CarTest</summary>
+**In class `public class CarTest` implement `public static void main(String[] args)`:**
+1. Create an empty `CarCollection` and a `Scanner` on `System.in`.
+2. Read lines one by one (`hasNextLine()` / `nextLine()`) and split each on spaces (`"\\s+"`):
+   - if the line has **only one word**, it's the manufacturer to filter by: keep it and stop reading;
+   - otherwise it's `manufacturer model price power`: create a `Car` (price with `Integer.parseInt`, power with `Float.parseFloat`) and add it with `addCar`.
+3. Call `sortByPrice(true)`, print `=== Sorted By Price ASC ===`, then each car of `getList()`, one per line.
+4. Call `sortByPrice(false)`, print `=== Sorted By Price DESC ===`, then each car of `getList()`.
+5. Print `=== Filtered By Manufacturer: X ===`, where `X` is the manufacturer exactly as read, then each car of `filterByManufacturer(X)`.
+
+Optional helpers: `static void print(List<Car> cars)` and `static String fillCollection(CarCollection cc)` (step 2, returns the manufacturer, or `""` if the input ends without one).
+
+<details><summary>Reference test main from the course repo: CarTest</summary>
 
 ```java
 import java.util.List;
@@ -663,7 +684,14 @@ Both posted solutions (basic: two comparator classes; advanced: `.reversed()` + 
 - `public void readResults(InputStream inputStream)` – one driver per line.
 - `public void printSorted(OutputStream outputStream)` – sorted, each line `String.format("%d. %-10s%10s", rank, name, bestLap)` with ranks from 1. The rank prefix comes from the posted solution; the aud text doesn't mention it. `flush()`, don't `close()`.
 
-<details><summary>Given test: F1Test</summary>
+**In class `public class F1Test` implement `public static void main(String[] args)`:**
+1. Create an `F1Race` with the default constructor.
+2. Call `readResults(System.in)`.
+3. Call `printSorted(System.out)`.
+
+All reading and printing happens inside `F1Race`, so `main` prints nothing itself.
+
+<details><summary>Reference test main from the course repo: F1Test</summary>
 
 ```java
 public class F1Test {
@@ -724,7 +752,15 @@ EXPECTED
 - `public void readTemperatures(InputStream inputStream)`
 - `public void writeDailyStats(OutputStream outputStream, char scale)` – sorted by day, `flush()` at the end.
 
-<details><summary>Given test: DailyTemperatureTest</summary>
+**In class `public class DailyTemperatureTest` implement `public static void main(String[] args)`:**
+1. Create a `DailyTemperatures` with the default constructor.
+2. Call `readTemperatures(System.in)`.
+3. Print `=== Daily temperatures in Celsius (C) ===`, then call `writeDailyStats(System.out, 'C')`.
+4. Print `=== Daily temperatures in Fahrenheit (F) ===`, then call `writeDailyStats(System.out, 'F')`.
+
+Step 4 prints the same data a second time in another scale, so it only works if `writeDailyStats` never overwrites the stored temperatures (see the bugs below).
+
+<details><summary>Reference test main from the course repo: DailyTemperatureTest</summary>
 
 ```java
 public class DailyTemperatureTest {
