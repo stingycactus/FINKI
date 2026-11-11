@@ -57,7 +57,6 @@ abstract class Product implements Comparable<Product> {
         }
         String type = parts[0].trim();
 
-        List<Integer> ratingsList = new ArrayList<>();
         try {
             int id = Integer.parseInt(parts[1].trim());
             String name = parts[2].trim();
@@ -66,18 +65,17 @@ abstract class Product implements Comparable<Product> {
             if (basePrice < 0) {
                 throw new InvalidProductException(line);
             }
+            List<Integer> ratingsList = new ArrayList<>();
             if (parts.length == 7) {
                 String ratings = parts[6];
                 if (ratings.isEmpty()) {
                     throw new InvalidProductException(line);
                 }
-                String[] ratingsParts = ratings.split(",");
-                for (String ratingsPart : ratingsParts) {
-                    int r = Integer.parseInt(ratingsPart.trim());
-                    if (r < 1 || r > 5) {
+                for (String ratingsPart : ratings.trim().split(",")) {
+                    if (Integer.parseInt(ratingsPart) < 1 || Integer.parseInt(ratingsPart) > 5) {
                         throw new InvalidProductException(line);
                     }
-                    ratingsList.add(r);
+                    ratingsList.add(Integer.valueOf(ratingsPart.trim()));
                 }
             }
             Product product;
@@ -96,9 +94,7 @@ abstract class Product implements Comparable<Product> {
             } else {
                 throw new InvalidProductException(line);
             }
-            for (int r : ratingsList) {
-                product.addRating(r);
-            }
+            product.ratings.addAll(ratingsList);
             return product;
         } catch (NumberFormatException e) {
             throw new InvalidProductException(line);
@@ -129,19 +125,11 @@ abstract class Product implements Comparable<Product> {
         ratings.add(rating);
     }
 
-    List<Integer> getRatings() {
-        return ratings;
-    }
-
-    int getRatingCount() {
+    public int getRatingCount() {
         return ratings.size();
     }
 
-    boolean hasRatings() {
-        return !ratings.isEmpty();
-    }
-
-    double getAverageRating() {
+    public double getAverageRating() {
         if (ratings.isEmpty()) {
             return 0;
         }
@@ -206,26 +194,6 @@ class DigitalProduct extends Product {
     @Override
     public String toString() {
         return String.format("%s | %d MB", super.toString(), sizeMb);
-    }
-}
-
-class ProductFilters {
-    public static Predicate<Product> priceBetween(double min, double max) {
-        return product -> product.getFinalPrice() >= min && product.getFinalPrice() <= max;
-    }
-
-    public static Predicate<Product> minAverageRating(double minRating) {
-        return product -> product.hasRatings() && product.getAverageRating() >= minRating;
-    }
-
-    public static Predicate<Product> heavierThan(double kg) {
-        return product -> {
-            if (product instanceof PhysicalProduct) {
-                PhysicalProduct pp = (PhysicalProduct) product;
-                return pp.getWeight() > kg;
-            }
-            return false;
-        };
     }
 }
 
@@ -305,48 +273,53 @@ class Store {
     }
 
     public void printTopRated(OutputStream os, int n) {
-        if (n <= 0) throw new IllegalArgumentException();
+        if (n<1) {
+            throw new IllegalArgumentException();
+        }
         PrintWriter pw = new PrintWriter(os);
         List<Product> filtered = products.stream()
-                .filter(Product::hasRatings)
-                .sorted(Comparator
-                        .comparing(Product::getAverageRating, Comparator.reverseOrder())
+                .filter(product -> product.getRatingCount() > 0)
+                .sorted(Comparator.comparing(Product::getAverageRating, Comparator.reverseOrder())
                         .thenComparing(Product::getRatingCount, Comparator.reverseOrder())
-                        .thenComparing(Comparator.naturalOrder()))
+                        .thenComparing(Product::getFinalPrice)
+                        .thenComparing(Product::getId))
                 .limit(n)
                 .collect(Collectors.toList());
-        if (filtered.isEmpty()) pw.println("No rated products");
+
+        if (filtered.isEmpty()) {
+            pw.println("No rated products");
+        }
         int rank = 1;
         for (Product product : filtered) {
-            pw.printf("%d. %-15s %.2f (%d)%n", rank++, product.getName(), product.getAverageRating(), product.getRatingCount());
+            pw.printf(String.format("%d. %-15s %.2f (%d)%n", rank++, product.getName(), product.getAverageRating(), product.getRatingCount()));
         }
         pw.flush();
     }
 
-    public Map<String, DoubleSummaryStatistics> categoryStatistics() {
-        Map<String, DoubleSummaryStatistics> map = new TreeMap<>();
-        for (Product p : products) {
-            map.putIfAbsent(p.getCategory(), new DoubleSummaryStatistics());
-            map.get(p.getCategory()).accept(p.getFinalPrice());
-        }
-        return map;
-    }
-
-    void printCategoryReport(OutputStream os) {
+    public void printCategoryReport(OutputStream os) {
         PrintWriter pw = new PrintWriter(os);
-        Map<String, DoubleSummaryStatistics> map = categoryStatistics();
-        if (map.isEmpty()) {
+        if (products.isEmpty()) {
             pw.println("No products");
-        }
-        for (Map.Entry<String, DoubleSummaryStatistics> e : map.entrySet()) {
-            DoubleSummaryStatistics s = e.getValue();
-            pw.println(String.format("%-12s count: %d, min: %.2f, max: %.2f, avg: %.2f",
-                    e.getKey(), s.getCount(), s.getMin(), s.getMax(), s.getAverage()));
+        } else {
+            TreeMap<String, List<Product>> categoriesMap = new TreeMap<>();
+            for (Product product : products) {
+                categoriesMap.putIfAbsent(product.getCategory(), new ArrayList<>());
+                categoriesMap.get(product.getCategory()).add(product);
+            }
+            for (Map.Entry<String, List<Product>> stringListEntry : categoriesMap.entrySet()) {
+                List<Product> categoryProducts = stringListEntry.getValue();
+                DoubleSummaryStatistics stats = categoryProducts.stream().mapToDouble(Product::getFinalPrice).summaryStatistics();
+                long count = stats.getCount();
+                double min = stats.getMin();
+                double max = stats.getMax();
+                double average = stats.getAverage();
+                pw.printf(String.format("%-12s count: %d, min: %.2f, max: %.2f, avg: %.2f%n", stringListEntry.getKey(), count, min, max, average));
+            }
         }
         pw.flush();
     }
 
-    List<Product> filter(Predicate<? super Product> condition) {
+    public List<Product> filter(Predicate<? super Product> condition) {
         if (condition == null) {
             throw new IllegalArgumentException();
         }
@@ -362,6 +335,13 @@ class Store {
 }
 
 public class StoreTest {
+    private static void printList(List<Product> list) {
+        if (list.isEmpty()) {
+            System.out.println("No products");
+        }
+        list.forEach(System.out::println);
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder productLines = new StringBuilder();
@@ -405,19 +385,27 @@ public class StoreTest {
                 case "REPORT":
                     store.printCategoryReport(System.out);
                     break;
-                case "FILTER_PRICE":
-                    printList(store.filter(ProductFilters.priceBetween(
-                            Double.parseDouble(parts[1]), Double.parseDouble(parts[2]))));
+                case "FILTER_PRICE": {
+                    double from = Double.parseDouble(parts[1]);
+                    double to = Double.parseDouble(parts[2]);
+                    printList(store.filter(p -> p.getFinalPrice() >= from && p.getFinalPrice() <= to));
                     break;
-                case "FILTER_RATING":
-                    printList(store.filter(ProductFilters.minAverageRating(Double.parseDouble(parts[1]))));
+                }
+                case "FILTER_RATING": {
+                    double minRating = Double.parseDouble(parts[1]);
+                    printList(store.filter(p -> p.getRatingCount() > 0 && p.getAverageRating() >= minRating));
                     break;
-                case "FILTER_HEAVY":
-                    printList(store.filter(ProductFilters.heavierThan(Double.parseDouble(parts[1]))));
+                }
+                case "FILTER_HEAVY": {
+                    double minWeight = Double.parseDouble(parts[1]);
+                    Predicate<Product> heavy = p -> p instanceof PhysicalProduct
+                            && ((PhysicalProduct) p).getWeight() > minWeight;
+                    printList(store.filter(heavy));
                     break;
+                }
                 case "FILTER_NULL":
                     try {
-                        printList(store.filter(null));
+                        store.filter(null);
                     } catch (IllegalArgumentException e) {
                         System.out.println("IllegalArgumentException");
                     }
@@ -425,16 +413,6 @@ public class StoreTest {
                 default:
                     System.out.println("Unknown command");
             }
-        }
-    }
-
-    private static void printList(List<Product> list) {
-        if (list.isEmpty()) {
-            System.out.println("No products");
-            return;
-        }
-        for (Product p : list) {
-            System.out.println(p);
         }
     }
 }

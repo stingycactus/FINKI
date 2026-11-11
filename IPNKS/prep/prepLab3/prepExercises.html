@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function cartTotal(cart) {
+            let total = 0;
+            for (const cartElement of cart) {
+                total+=cartElement.price * cartElement.qty;
+            }
+            return total
+        }
+        // console.log(cartTotal([{name: "pen", price: 20, qty: 3}, {name: "book", price: 350, qty: 1}]));
+        // console.log(cartTotal([{name: "x", price: 99, qty: 0}]));
+        // console.log(cartTotal([]));
+
+        function unique(arr) {
+            return [...new Set(arr)]
+        }
+        // console.log(unique([1, 2, 2, 3, 1]));
+
+        function average(arr) {
+            if (arr.length === 0) return 0;
+            let total = 0;
+            arr.forEach(v => total += v);
+            return Math.round(total / arr.length * 100) / 100;
+        }
+        // console.log(average([8, 9, 10]));
+
+        function countWords(text) {
+            text = text.toLowerCase();
+            let parts = text.trim().split(/\s+/);
+            let counts = {}
+            for (const part of parts) {
+                counts[part] = (counts[part] || 0) + 1;
+            }
+            return counts;
+        }
+        // console.log(countWords("The cat and the hat"));
+
+        function topStudent(students) {
+            if (students.length === 0) return null;
+            let best = students[0];
+            for (let i = 1; i < students.length; i++) {
+                if (students[i].grade > best.grade) {
+                    best = students[i];
+                }
+            }
+            return best.name;
+        }
+
+        function passedNames(students, min) {
+            return students.filter(s => s.grade >= min).map(s => s.name).sort();
+        }
+
+        const st = [{name:"Ana",grade:8},{name:"Bojan",grade:10},{name:"Cvetan",grade:10},{name:"Dana",grade:6}];
+        // console.log(topStudent(st));
+        // console.log(passedNames(st, 9));
+
+        function chunk(arr, size) {
+            const result = [];
+            for (let i = 0; i < arr.length; i+=size) {
+                result.push(arr.slice(i, i+size));
+            }
+            return [result]
+        }
+
+        console.log(chunk([1, 2, 3, 4, 5], 2));
+    </script>
+</head>
+<body>
+
+</body>
+</html>

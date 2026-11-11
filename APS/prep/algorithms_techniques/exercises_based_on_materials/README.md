@@ -2,13 +2,13 @@
 
 **The exercises:** 9 tasks (Part 2) that each need one technique: build the largest number from digits, minimum train platforms, max earnings in 40 hours, minimum meeting rooms, street lights, positive binary substrings, max product of an increasing sequence, recursive binary search, and fewest squares to reach 0.
 
-**Based on:** Aud 03 "Algorithms techniques" (brute force slides 2-8, greedy 9-17, knapsack 18-26, divide and conquer 27-39) and lectures 04/05 "Algorithms techniques" (greedy scheduling and bin packing, D&C max, dynamic programming). Things the exercises need that neither shows as code are marked **not in auds**.
+**Based on:** Aud 03 "Algorithms techniques" (brute force slides 2-8, greedy 9-17, knapsack 18-26, divide and conquer 27-39), Aud 04 "Algorithms techniques" (mergesort and pow again, then dynamic programming: Pascal's triangle, Mars robot, cheapest flights, 0-1 knapsack, longest common subsequence), and lectures 04/05 "Algorithms techniques" (greedy scheduling and bin packing, D&C max, dynamic programming). Things the exercises need that none of them shows as code are marked **not in auds**.
 
 Wherever there's a shorter way than the aud's hand-written code, a **Modern:** line gives it. Both work in the checker (Java 11, `java.util` allowed).
 
 Part 1 is a practice theme, a **delivery depot**: packages with weights and values, trucks that arrive and leave, charging stations along a road. Each section is its own module with its own `Main.java`: expand **Main.java for this module** at the end of a section, paste it, and fill in the empty methods. `main` already calls them on hardcoded test cases, and the expected output is right below the code. Part 2 is the exercise set, with hints and tests but no solutions.
 
-**Workflow (IntelliJ):** right-click the parent folder → **New → Module…**, build system IntelliJ, no sample code. Never "Mark Directory as Sources Root" on a folder meant to be its own module (that's what broke your run configs). Run with the gutter ▶ next to `main`. Suggested module names: `brute_force`, `greedy_coins`, `fractional_knapsack`, `max_overlap`, `covering`, `divide_and_conquer`, `dynamic_programming`.
+**Workflow (IntelliJ):** right-click the parent folder → **New → Module…**, build system IntelliJ, no sample code. Never "Mark Directory as Sources Root" on a folder meant to be its own module (that's what broke your run configs). Run with the gutter ▶ next to `main`. Suggested module names: `brute_force`, `greedy_coins`, `fractional_knapsack`, `max_overlap`, `covering`, `divide_and_conquer`, `dynamic_programming`, `dp_tables`.
 
 ---
 
@@ -327,7 +327,7 @@ next fit 5, first fit 4
 - Divide into smaller subproblems → solve them recursively → combine. Always has a **base case** that stops the recursion.
 - Lecture example, max of an array: the max of `array[left..right]` is the larger of the max of the left half and the max of the right half; base case `left == right` (one element) → `array[left]`. Example `29 14 15 1 6 10 32 12` → 32.
 - `pow(base, exponent)` (slide 36): compute `half = pow(base, exponent / 2)` **once**, return `half * half` (or `base * half * half` if the exponent is odd): O(log n). Solution 2 (slide 38) calls `pow(base, exponent / 2)` **twice**: same result, but O(n) calls. Lesson: never recompute the same recursive call.
-- Mergesort (slides 29-34): split at `mid = (left + right) / 2`, sort both halves, `merge`. O(n log n). The aud writes `a, l, r` for `array, left, right` and `x, n` for `base, exponent`. Two bugs in the posted aud code: `int I = l` (capital I, then uses `i` → compile error) and `int temp[] = new int[100]` (crashes for more than 100 elements; use `new int[numel]`).
+- Mergesort (slides 29-34): split at `mid = (left + right) / 2`, sort both halves, `merge`. O(n log n). The aud writes `a, l, r` for `array, left, right` and `x, n` for `base, exponent`. Two bugs in the Aud 03 code: `int I = l` (capital I, then uses `i` → compile error; Aud 04's copy fixes this one) and `int temp[] = new int[100]` (in both auds; crashes for more than 100 elements; use `new int[numel]`).
 - Binary search works the same way on a **sorted** array: look at the middle; if that's not it, recurse into the one half that can contain the answer. O(log n). Return a special value (like `-1`) when `left > right` (nothing left to search).
 
 **Exercise:**
@@ -389,6 +389,8 @@ pow2(2, 16) = 65536, calls 63
 </details>
 
 ## 1.7 Dynamic programming: remember subproblem answers (lecture 05)
+
+This section uses the lecture's 1D examples (Fibonacci, coins, sequences). Aud 04's 2D-table problems come right after, in 1.8.
 
 - DP = the recursion asks the **same subproblem many times**, so store each answer in an array once. Fibonacci recursively is O(2ⁿ); with an array it's O(n).
 - Recipe: (1) **state**: what `dp[i]` means in words; (2) **transition**: how `dp[i]` is built from smaller states; (3) **base case**; (4) **order**: fill so the states you need are already done; (5) where the answer is (`dp[n]`, or max over all `dp[i]`).
@@ -491,6 +493,196 @@ best sum: 18
 
 </details>
 
+## 1.8 DP with tables (Aud 04, problems 2-6)
+
+Aud 04 starts by repeating mergesort and `pow` from Aud 03 (1.6). In its mergesort the `int I` typo is fixed, but `new int[100]` is still there. The rest of the aud is dynamic programming, mostly with **2D tables**.
+
+- Same recipe as 1.7: say in words what one cell means, how it's built from cells you already have, and what the base cases are.
+- Many problems need **two numbers** to describe a subproblem ("best path to row `r`, column `c`", "best profit with the first `i` items and capacity `j`"), so the table is 2D: `best[r][c]`.
+- Fill order: the **first row and first column** are the base cases, then row by row, left to right. That way the cells above and to the left are always done before you need them.
+- Walking back: the table gives the best **value**. To find **which choices** produced it (which items, which letters), start at the answer cell and walk backwards, asking at each cell which option it came from. Same idea as `dpCoins` in 1.7 step 3.
+
+### Pascal's triangle: binomial coefficients (problem 2)
+
+- `C(n, k)` = how many ways to choose `k` things out of `n` (e.g. 2 out of 5: `C(5, 2) = 10`).
+- Each number in Pascal's triangle is the sum of the two above it: `C(n, k) = C(n-1, k-1) + C(n-1, k)`, and the edges are 1.
+  ```
+  row 0:          1
+  row 1:         1 1
+  row 2:        1 2 1
+  row 3:       1 3 3 1
+  row 4:      1 4 6 4 1
+  row 5:    1 5 10 10 5 1      -> C(5, 2) = 10
+  ```
+- The aud's naive recursion (`binomial(n-1, k) + binomial(n-1, k-1)`) recomputes the same cells over and over: exponential, "DO NOT RUN THIS CODE FOR LARGE INPUTS". The DP fills the triangle once: `table[row][0] = table[row][row] = 1`, then `table[row][col] = table[row-1][col-1] + table[row-1][col]`. O(n²).
+- Why not just `n! / (k! (n-k)!)`? The factorials overflow long before the answer does (aud: 100! needs 525 bits).
+- The aud uses `int`: `C(30, 15) = 155117520` fits, but `C(34, 17) = 2333606220` doesn't (int max is 2147483647). Use `long`.
+
+### Mars robot: most stones on a grid (problem 3)
+
+- A grid of numbers (stones per square). The robot starts top-left, must reach bottom-right, and may only move **right** or **down**. Maximize the stones collected.
+- Trying every path is exponential. But the best path to any square must come **from the square above or the square to the left**, whichever has the better best path:
+
+  `best[r][c] = max(best[r-1][c], best[r][c-1]) + grid[r][c]`
+
+- Base cases: `best[0][0] = grid[0][0]`; the first row can only be reached from the left, the first column only from above (just running sums).
+- Example:
+  ```
+  grid:           best:
+  1 3 1 2         1  4  5  7
+  2 1 5 1         3  5 10 11
+  4 2 1 3         7  9 11 14     -> 14
+  ```
+  For example `best[1][2] = max(best[0][2] = 5, best[1][1] = 5) + 5 = 10`.
+- The aud's variations: diagonal moves add a third option `best[r-1][c-1]` to the `max`; a cylindrical map lets the robot wrap from the last row to the first.
+
+### Cheapest flights west to east (problem 4)
+
+- Cities `0..n-1` from west to east; you may only fly east. Each city has an airport tax `tax[c]` (paid in every city you visit, including the first), and flying from city `i` to a later city `j` costs `cost[i][j]`. Find the cheapest way from the first city to the last.
+- `best[city]` = cheapest total price to arrive in `city`. You arrived from **some** earlier city `from`, so try them all:
+
+  `best[city] = min over from < city of (best[from] + cost[from][city] + tax[city])`, with `best[0] = tax[0]`.
+
+- This is the same "best ending here, built from all earlier ones" shape as `maxIncreasingSum` (1.7 step 4) and exercise 7.
+- Example: `tax = {5, 2, 8, 3}`, flights `0→1: 10, 0→2: 15, 0→3: 40, 1→2: 4, 1→3: 25, 2→3: 6`:
+  ```
+  best[0] = 5
+  best[1] = 5 + 10 + 2 = 17
+  best[2] = min(5 + 15 + 8 = 28,  17 + 4 + 8 = 29)                   = 28
+  best[3] = min(5 + 40 + 3 = 48,  17 + 25 + 3 = 45,  28 + 6 + 3 = 37)  = 37
+  ```
+
+### 0-1 knapsack (problem 5)
+
+- Like 1.3, but items **can't be split**: take an item whole or leave it. Greedy by ratio fails here (1.3: 160 instead of 220).
+- `D[i][j]` = best profit using only the **first `i` items** with a knapsack of capacity `j`. For item `i` there are two options:
+  - skip it: `D[i-1][j]` (best with the first `i-1` items, same capacity)
+  - take it, if it fits (`weight <= j`): its profit + `D[i-1][j - weight]` (the best you can do with the space that's left)
+
+  `D[i][j]` is the larger of the two. Row 0 (no items) and column 0 (no capacity) are all 0.
+- The aud's example, capacity 50, items (weight, profit) = (10, 60), (20, 100), (30, 120), shown every 10 kg:
+  ```
+  capacity:    0   10   20   30   40   50
+  no items:    0    0    0    0    0    0
+  item 1:      0   60   60   60   60   60
+  items 1-2:   0   60  100  160  160  160
+  items 1-3:   0   60  100  160  180  220     -> 220
+  ```
+  `D[3][50] = max(skip: D[2][50] = 160, take item 3: 120 + D[2][20] = 220) = 220`.
+- **Which items?** Walk back from `D[n][capacity]`: if `D[i][j] == D[i-1][j]`, item `i` wasn't needed, so go up. Otherwise item `i` was taken: record it and go to `D[i-1][j - weight[i]]`. Here: `D[3][50] = 220 ≠ 160` → item 3, go to `D[2][20] = 100 ≠ 60` → item 2, go to `D[1][0] = 0` → stop. Items **2 and 3**. (This is the aud's homework.)
+- Time θ(n · C): one cell per item per capacity value.
+- The aud's analysis slide writes the condition as `if (j > t[i])`, but its code uses `t[i-1] <= j`. The code is right: an item that exactly fills the knapsack fits.
+
+### Longest common subsequence (problem 6, homework)
+
+- A **subsequence** keeps the order but may skip letters (`ace` is a subsequence of `abcde`). Find the longest one that two strings share.
+- `T[i][j]` = LCS length of the first `i` letters of `x` and the first `j` letters of `y`:
+  - last letters equal (`x.charAt(i-1) == y.charAt(j-1)`): that letter is part of the LCS → `T[i-1][j-1] + 1`
+  - different: drop the last letter of one string or the other, whichever is better → `max(T[i-1][j], T[i][j-1])`
+- The string itself: walk back from `T[N][M]`. Equal letters → take it, go diagonally up-left; otherwise move to the neighbour (`up` or `left`) with the same value. The letters come out backwards, so reverse at the end.
+- The aud's example: `ggcaccacg` and `acggcggatacg` → length 7, `ggcaacg`.
+- Two notes on the posted code: the length method's initialization loops open `{` that are never closed (it won't compile as printed; copy the loops from the String method). And the zero-initialization isn't needed at all: Java arrays start filled with 0.
+
+**Exercise:**
+1. `binomial(n, k)` with a `long[][]` table → `10`, `120`, `155117520`. Break it on purpose: switch to `int` and try `binomial(34, 17)`.
+2. `maxStones(grid)`: fill `best`, print it row by row (`Arrays.toString(row)`), return the bottom-right cell. Check against the table above.
+3. `cheapestTrip(tax, cost)`: print the `best` array, return the last one. `cost[i][j]` is only used for `i < j`.
+4. `knapsack01(weight, profit, capacity)` → `220`. Then `knapsackItems`: the walk back, returning the item numbers (1-based, like the aud) in increasing order → `[2, 3]`. The second test, (1, 1), (3, 4), (4, 5), (5, 7) with capacity 7, is another case where greedy by ratio fails: it takes the 5 kg item (ratio 1.4) and then the 1 kg one for 8, but items 2 and 3 give **9**.
+5. `lcsLength(x, y)` and `lcsString(x, y)` → `7` and `ggcaacg`. Third test (a textbook example): `ABCBDAB` / `BDCABA` → 4.
+
+<details>
+<summary><b>Main.java for this module</b> (<code>dp_tables</code>)</summary>
+
+```java
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        // Pascal's triangle
+        System.out.println("C(5, 2) = " + binomial(5, 2));
+        System.out.println("C(10, 3) = " + binomial(10, 3));
+        System.out.println("C(30, 15) = " + binomial(30, 15));
+
+        // Mars robot
+        int[][] grid = {
+                {1, 3, 1, 2},
+                {2, 1, 5, 1},
+                {4, 2, 1, 3}
+        };
+        System.out.println("most stones: " + maxStones(grid));
+
+        // Cheapest flights west to east (cost[i][j] only matters for i < j)
+        int[] tax = {5, 2, 8, 3};
+        int[][] cost = {
+                {0, 10, 15, 40},
+                {0, 0, 4, 25},
+                {0, 0, 0, 6},
+                {0, 0, 0, 0}
+        };
+        System.out.println("cheapest trip: " + cheapestTrip(tax, cost));
+
+        // 0-1 knapsack
+        int[] weight = {10, 20, 30};
+        int[] profit = {60, 100, 120};
+        System.out.println("best profit: " + knapsack01(weight, profit, 50));
+        System.out.println("items taken: " + knapsackItems(weight, profit, 50));
+        int[] weight2 = {1, 3, 4, 5};
+        int[] profit2 = {1, 4, 5, 7};
+        System.out.println("best profit: " + knapsack01(weight2, profit2, 7));
+        System.out.println("items taken: " + knapsackItems(weight2, profit2, 7));
+
+        // Longest common subsequence
+        System.out.println("LCS length: " + lcsLength("ggcaccacg", "acggcggatacg"));
+        System.out.println("LCS: " + lcsString("ggcaccacg", "acggcggatacg"));
+        System.out.println("LCS length: " + lcsLength("ABCBDAB", "BDCABA"));
+    }
+
+    // TODO: Pascal's triangle table, return C(n, k)
+    static long binomial(int n, int k) { return 0; }
+
+    // TODO: fill best[][], print it row by row, return the bottom-right cell
+    static int maxStones(int[][] grid) { return 0; }
+
+    // TODO: fill best[], print it, return the price to reach the last city
+    static int cheapestTrip(int[] tax, int[][] cost) { return 0; }
+
+    // TODO: D[i][j] table, return the best profit
+    static int knapsack01(int[] weight, int[] profit, int capacity) { return 0; }
+
+    // TODO: walk back through the table, return the taken item numbers (1-based, increasing)
+    static List<Integer> knapsackItems(int[] weight, int[] profit, int capacity) { return new ArrayList<>(); }
+
+    // TODO: T[i][j] table, return the LCS length
+    static int lcsLength(String x, String y) { return 0; }
+
+    // TODO: walk back through the table, return the LCS itself
+    static String lcsString(String x, String y) { return ""; }
+}
+```
+
+Expected output once every method is filled in:
+
+```
+C(5, 2) = 10
+C(10, 3) = 120
+C(30, 15) = 155117520
+[1, 4, 5, 7]
+[3, 5, 10, 11]
+[7, 9, 11, 14]
+most stones: 14
+[5, 17, 28, 37]
+cheapest trip: 37
+best profit: 220
+items taken: [2, 3]
+best profit: 9
+items taken: [2, 3]
+LCS length: 7
+LCS: ggcaacg
+LCS length: 4
+```
+
+</details>
+
 ---
 
 # 2. The exercises
@@ -521,7 +713,7 @@ One module each. The checker gives input on standard input, so the version you s
 
 **6. Positive substrings.** All `i..j` pairs with a running balance: `+1` for `'1'`, `-1` for `'0'`; count when balance `> 0`. Read the string with `in.next()` and use `charAt`. Given: `10011` → 6, `101` → 3. Extra: `0000` → 0, `1111` → 10, `110100` → 8.
 
-**7. Max product.** "Increasing subarray" here means **not contiguous**: the example's answer `3, 100, 150` skips elements. So it's 1.7 step 3 with `*` instead of `+`: `dp[i] = a[i] * max dp[j]` (for `j < i`, `a[j] < a[i]`), or just `a[i]`. Use `long`. Given: 45000 and 21780000. Extra: `4` / `5 4 3 2` → 5; `3` / `2 2 2` → 2 (strictly increasing); `6` / `100000 200000 300000 1 2 3` → `6000000000000000` (with `int` you get garbage: `100000 * 200000` overflows to `-1474836480`).
+**7. Max product.** "Increasing subarray" here means **not contiguous**: the example's answer `3, 100, 150` skips elements. So it's 1.7 step 4 (`maxIncreasingSum`) with `*` instead of `+`: `dp[i] = a[i] * max dp[j]` (for `j < i`, `a[j] < a[i]`), or just `a[i]`. Use `long`. Given: 45000 and 21780000. Extra: `4` / `5 4 3 2` → 5; `3` / `2 2 2` → 2 (strictly increasing); `6` / `100000 200000 300000 1 2 3` → `6000000000000000` (with `int` you get garbage: `100000 * 200000` overflows to `-1474836480`).
 
 **8. Binary search.** 1.6, recursive `search(a, l, r, m)` returning the index or `-1`, then print `Ne postoi` for -1. Positions are 0-based. Given: `2`, `6`. Extra: `5 6` / `1 2 3 4 5` → `Ne postoi`; `1 4` / `4` → 0; `6 1` / `1 3 5 7 9 11` → 0. Input is `N M` on the first line (array size first, searched number second).
 
@@ -537,16 +729,44 @@ One module each. The checker gives input on standard input, so the version you s
 
 ---
 
-# 3. Aud 03 and midterm theory
+# 3. Aud 03, Aud 04 and midterm theory
 
 - **Problem 1, closest points** (= 1.1 step 2): O(n²) pairs. Test: points (0,0) (3,4) (1,1) → `1.414...`.
 - **Problem 2, two queens** (= 1.1): 8⁴ checks, result 2576 (ordered pairs).
 - **Problem 3, coins** (= 1.2): greedy, works for 50/10/5/2/1, fails for 1/2/5/8/10 at 13.
-- **Problem 4, knapsack** (= 1.3): fractional → greedy by ratio; 0-1 → not greedy (DP).
+- **Problem 4, knapsack** (= 1.3): fractional → greedy by ratio; 0-1 → not greedy (DP, Aud 04 problem 5 = 1.8).
 - **Problem 5, pow** (= 1.6): T(n) = T(n/2) + O(1) → O(log n); solution 2: T(n) = 2T(n/2) + O(1) → O(n).
 - **Mergesort**: T(n) = 2T(n/2) + n → O(n log n).
+- **Aud 04** (= 1.8): problem 1 is `pow` again; problem 2 Pascal's triangle (naive recursion exponential, table O(n²)); problem 3 Mars robot `best[r][c] = max(above, left) + grid[r][c]`; problem 4 cheapest flights `best[k] = min over c < k of (best[c] + cost[c][k] + tax[k])`; problem 5 0-1 knapsack θ(n·C), example 220 with items {2, 3}; problem 6 (homework) LCS, `ggcaacg`.
+- Theory questions to expect: DP = remembering computed results (memoization), uses more memory for less time; use it when subproblems **overlap**; D&C is for **independent** subproblems and becomes inefficient when they overlap (recursive Fibonacci, naive Pascal); longest increasing subsequence → DP; mergesort → D&C.
 - Lectures: brute force always correct but slow; greedy fast but optimum not guaranteed; D&C always correct (combine step); DP = overlapping subproblems + stored results (recursive memoization or iterative table); Fibonacci naive O(2ⁿ) vs O(n), and with 2 variables O(1) memory.
 - Bin packing: next fit O(n), at worst 2× optimal; first fit O(n log n) best implementation, O(n²) simple.
 - Strassen-style matrix D&C: 8 multiplications T(n) = 8T(n/2) + O(n²) is still O(n³); 7 multiplications gives O(n^log₂7) ≈ O(n^2.81).
 
-Sources: Aud 03 "Algorithms techniques" (03_Algorithms_Techniques.pdf), lectures APS_04 and APS_05 "Tehniki algoritmi".
+# 4. Greedy cheat sheet: which sort key?
+
+Most greedy problems are "sort by the right key, then go through once". If you recognize the situation, you know the key:
+
+| Situation | Usual key | Seen in |
+|---|---|---|
+| Make a sum/amount with as few items as possible | biggest first (and check the "NOT optimal" case: if greedy can fail, it's DP) | coins (1.2), exercise 1 |
+| Value vs. size, can take parts | value / size, biggest first | fractional knapsack (1.3), exercise 3 |
+| Value vs. size, whole items only | not greedy: DP table | 0-1 knapsack (1.8) |
+| Everyone waits for the ones before them | shortest first | barber / scheduling (1.2) |
+| Waiting cost differs per item (weights) | time / weight, smallest first | Lab 4 A and B |
+| Two numbers pulling in opposite directions | usually a ratio (or sum/difference) of the two | Lab 4, acrobat tower (weight + strength) |
+| Pick as many non-overlapping intervals as possible | earliest end first | (not done yet) |
+| How many intervals overlap at once | sort starts and ends separately, sweep | trains, rooms (1.4) |
+| Cover a line with as few pieces as possible | leftmost uncovered point, pick the one reaching furthest | street lights (1.5) |
+| Jobs with deadlines and profits (each takes 1 slot) | highest profit first, latest free slot before the deadline | Abdul Bari 3.2 |
+| Pack items into as few bins as possible | no exact greedy; next fit (only the current bin), first fit (first bin with room), best fit (fullest bin that still fits) | bin packing (lecture 04/05, 1.5) |
+| Shortest codes for frequent symbols | repeatedly merge the two smallest frequencies | Huffman codes (lecture 04, theory only) |
+
+How to check a guessed key in a lab, in about a minute:
+1. Sort the first example by your key, by hand.
+2. Compute the answer for that order. If it matches the expected output, try the next example.
+3. If it doesn't match, the key is wrong. The failing example often shows why (for example, a heavy task got pushed to the end).
+
+Ties: if the task says "equal ones in input order", use a stable sort (`List.sort`, or bubble sort with strict `>`), or add the original index as a tie-breaker. The aud's exchange sort is not stable.
+
+Sources: Aud 03 "Algorithms techniques" (03_Algorithms_Techniques.pdf), Aud 04 "Algorithms techniques" (04_Tehniki_Algoritmi_2_EN.pdf), lectures APS_04 and APS_05 "Tehniki algoritmi".
