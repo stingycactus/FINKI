@@ -4,7 +4,7 @@
 
 Part 1 builds one practice project, a small **raffle**: a `Bag` you draw prizes from, prize rankings and some statistics. Each exercise extends the previous one. Part 2 maps every Aud 3 task to the exercises that already cover it, with test inputs and expected outputs.
 
-Setup: new IntelliJ module `prepExercise3`, everything in `Main.java`, only `Main` is `public`. Keep earlier test code in `main` (comment it out) so you can re-run it.
+Setup: new IntelliJ module `prepExercise3`, everything in `CarTest.java`, only `Main` is `public`. Keep earlier test code in `main` (comment it out) so you can re-run it.
 
 ---
 

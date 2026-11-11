@@ -2,7 +2,7 @@
 
 Parts 1 and 2 teach the concepts one at a time. All exercises build **one project, a parking `Garage`**, and each exercise extends the code from the previous one. Part 3 is the auds themselves; by then every task there is something you've already built once in the Garage.
 
-Setup: one IntelliJ project, all classes in `Main.java`, only `Main` is `public`. Keep the old `main` code around as comments: later exercises re-run earlier samples to check nothing broke.
+Setup: one IntelliJ project, all classes in `CarTest.java`, only `Main` is `public`. Keep the old `main` code around as comments: later exercises re-run earlier samples to check nothing broke.
 
 Java 11 limits (if NP's checker is Java 11 like the labs): no `switch` with `->`, no `v instanceof Chargeable c` pattern (Java 16), no records, no `.formatted()`.
 
