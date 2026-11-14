@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../jquery/jquery-ui.css">
+    <script src="../jquery/jquery.js"></script>
+    <script src="../jquery/jquery-ui.js"></script>
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .navbar p {
+            cursor: pointer;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            width: 40%;
+            margin: 0 auto;
+        }
+
+        .card {
+            border: 1px solid black;
+        }
+
+        .content {
+            display: none;
+        }
+
+        .title {
+            text-align: center;
+        }
+
+        .collapse .data {
+            display: none;
+        }
+
+        .btn {
+            visibility: hidden;
+        }
+        .card:hover .btn {
+            visibility: visible;
+        }
+
+        .dialog {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <p data-target=".compactCamerasContent">Compact Digital Cameras</p>
+    <p data-target=".DSLRCamerasContent"="DSLRCamerasContent">DSLR</p>
+    <p data-target=".speedLiteCamerasContent">Speedlite</p>
+</div>
+
+<div class="content compactCamerasContent">
+    <h1 class="title">compact cameras</h1>
+    <div class="grid">
+        <div class="card"><h1>Name</h1>
+            <p>pic</p>
+            <button class="btn">
+                add to cart
+            </button>
+            <button class="btn">rate</button>
+        </div>
+        <div class="card"><h1>Name</h1>
+            <p>pic</p></div>
+        <div class="card"><h1>Name</h1>
+            <p>pic</p></div>
+        <div class="card"><h1>Name</h1>
+            <p>pic</p></div>
+    </div>
+</div>
+
+<div class="content DSLRCamerasContent">
+    <h1 class="title">dslr cameras</h1>
+    <div class="grid">
+        <div class="card"><h1>Name</h1>
+            <p>pic</p></div>
+        <div class="card"><h1>Name</h1>
+            <p>pic</p></div>
+    </div>
+</div>
+
+<div class="content speedLiteCamerasContent">
+    <h1 class="title">speedlite flashes</h1>
+    <div class="grid">
+        <div class="card"><h1>Name</h1>
+            <p>pic</p></div>
+        <div class="card"><h1>Name</h1>
+            <p>pic</p></div>
+        <div class="card"><h1>Name</h1>
+            <p>pic</p></div>
+    </div>
+</div>
+
+<div class="collapsable-panels">
+    <div class="collapse">
+        <div class="title">Services & Apps</div>
+        <div class="data">asdlasdasofk</div>
+    </div>
+    <div class="collapse">
+        <div class="title">Get inspired</div>
+        <div class="data">asdlasdasofk</div>
+    </div>
+    <div class="collapse">
+        <div class="title">Support</div>
+        <div class="data">asdlasdasofk</div>
+    </div>
+</div>
+
+<!--<div class="dialog">-->
+<!--    <h1>Rate me!</h1>-->
+<!--    <input type="text">-->
+<!--</div>-->
+
+<script>
+    $(document).ready(function () {
+        $(".navbar p").click(function () {
+            $(".content").hide();
+            $($(this).data("target")).show();
+        });
+        $(".collapse .title").click(function () {
+            $(this).siblings(".data").slideToggle(200);
+        })
+        // $(".btn").click(function () {
+        //     $(".dialog").dialog({
+        //         autoOpen: false,
+        //         modal: true,
+        //         buttons: {
+        //             Close: function () {
+        //                 $(this).dialog("close");
+        //             }
+        //         }
+        //     });
+        //     $(".dialog").dialog("open");
+        // })
+    });
+</script>
+</body>
+</html>

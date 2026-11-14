@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../jquery/jquery-ui.css">
+    <script src="../../jquery/jquery.js"></script>
+    <script src="../../jquery/jquery-ui.js"></script>
+    <style>
+        /*.data {*/
+        /*    display:none;*/
+        /*}*/
+        /*h1 {*/
+        /*    cursor:pointer;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<!--<div class="title">-->
+<!--    <h1>Delivery</h1>-->
+<!--    <div class="data">-->
+<!--        <p>blabla</p>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="title">-->
+<!--    <h1>Warranty</h1>-->
+<!--    <div class="data">-->
+<!--        <p>blabla</p>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="title">-->
+<!--    <h1>Contact</h1>-->
+<!--    <div class="data">-->
+<!--        <p>blabla</p>-->
+<!--    </div>-->
+<!--</div>-->
+<div id="accordion">
+    <h3>Delivery</h3>
+    <div><p>blabla</p></div>
+
+    <h3>Warranty</h3>
+    <div><p>blabla</p></div>
+
+    <h3>Contact</h3>
+    <div><p>blabla</p></div>
+</div>
+<script>
+    $(document).ready(function () {
+        // $(".title h1").click(function () {
+        //     $(this).siblings(".data").slideToggle();
+        // })
+        $("#accordion").accordion({
+            collapsible: true,
+            active: false,
+        });
+    });
+</script>
+</body>
+</html>

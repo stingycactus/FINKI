@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../jquery/jquery-ui.css">
+    <script src="../../jquery/jquery.js"></script>
+    <script src="../../jquery/jquery-ui.js"></script>
+    <style>
+        #detailed, .movie { display: none; }
+        #titles li { cursor: pointer; }
+    </style>
+</head>
+<body>
+<div id="base">
+    <ul id="titles">
+        <li>Oblivion</li>
+        <li>Elysium</li>
+        <li>Interstellar</li>
+        <li>Gravity</li>
+    </ul>
+</div>
+
+<div id="detailed">
+    <button id="prev">prev</button>
+    <button id="top">top</button>
+    <button id="next">next</button>
+
+    <div class="movie"><h2>Oblivion</h2><p>Description of Oblivion.</p></div>
+    <div class="movie"><h2>Elysium</h2><p>Description of Elysium.</p></div>
+    <div class="movie"><h2>Interstellar</h2><p>Description of Interstellar.</p></div>
+    <div class="movie"><h2>Gravity</h2><p>Description of Gravity.</p></div>
+</div>
+<script>
+    $(document).ready(function () {
+        const movies = $(".movie");
+        let index;
+
+        const show = (i) => {
+            if (i < 0) {
+                index = 3;
+            } else if (i > 3) {
+                index = 0;
+            } else {
+                index = i;
+            }
+            movies.hide();
+            movies.eq(index).show();
+        };
+
+        $("#titles li").click(function () {
+            show($(this).index());
+            $("#base").hide();
+            $("#detailed").show();
+        });
+
+        $("#next").click(() => show(index + 1));
+        $("#prev").click(() => show(index - 1));
+        $("#top").click(() => {
+            $("#detailed").hide();
+            $("#base").show();
+        });
+    });
+</script>
+</body>
+</html>

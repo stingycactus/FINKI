@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../jquery/jquery-ui.css">
+    <script src="../../jquery/jquery.js"></script>
+    <script src="../../jquery/jquery-ui.js"></script>
+    <style>
+        #grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        .desc {
+            display:none;
+        }
+        .item {
+            min-height: 100px;
+        }
+        #area {
+            width:300px;
+            height:400px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+<h1>Phone shop</h1>
+<div id="area">
+
+</div>
+<div id="grid">
+    <div class="item"><h3>Phone N</h3>
+        <p class="desc">some text</p></div>
+    <div class="item"><h3>Phone N</h3>
+        <p class="desc">some text</p></div>
+    <div class="item"><h3>Phone N</h3>
+        <p class="desc">some text</p></div>
+    <div class="item"><h3>Phone N</h3>
+        <p class="desc">some text</p></div>
+    <div class="item"><h3>Phone N</h3>
+        <p class="desc">some text</p></div>
+    <div class="item"><h3>Phone N</h3>
+        <p class="desc">some text</p></div>
+    <button id="add">Add</button>
+</div>
+</body>
+<script>
+    $(document).ready(() => {
+        console.log($("h1").text())
+        $(".item").css("border", "1px solid black");
+        console.log($(".item").length);
+        $(".item").each(function (i) {
+            $(this).find("h3").text(`Phone ${i + 1}!`);
+        })
+        // $("#grid").on("click", ".item", function () {
+        //     alert($(this).find("h3").text());
+        // });
+        $("#add").click(function () {
+            $("#grid").append("<div class='item'><h3>New phone</h3></div>");
+        })
+        $(".item").find("h3").click(function () {
+            $(this).siblings(".desc").slideToggle();
+        })
+
+    })
+</script>
+</html>
