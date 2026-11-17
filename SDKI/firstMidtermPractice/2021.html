@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../jquery/jquery-ui.css">
+    <script src="../jquery/jquery.js"></script>
+    <script src="../jquery/jquery-ui.js"></script>
+    <style>
+        #detailed, .item {
+            display:none;
+        }
+        #titles li {
+            cursor: pointer;
+        }
+        ul {
+            display: flex;
+            justify-content: center;
+            gap:50px;
+            padding:0;
+            list-style:none;
+        }
+        .grid {
+            width:50%;
+            display:grid;
+            grid-template-columns: 1fr 1fr;
+            gap:50px;
+        }
+        .card {
+            border: 1px solid black;
+            border-radius:10px;
+            padding: 15px;
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items:center;
+        }
+        .btn {
+            margin: 5px 0;
+        }
+        .collapse .data {
+            display: none;
+        }
+        .collapse .ptitle {
+            border: 1px solid gray;
+            margin:20px 0 0 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="base">
+    <ul id="titles">
+        <li>DJI</li>
+        <li>Parrot</li>
+        <li>Yuneec</li>
+    </ul>
+</div>
+<div id="detailed">
+    <button id="prev">prev</button>
+    <button id="top">top</button>
+    <button id="next">next</button>
+    <div class="item">
+        <h2>DJI</h2>
+        <div class="grid">
+            <div class="card">
+                <p>name</p>
+                <p>img</p>
+                <button class="btn">Add to cart</button>
+                <button class="btn comment">Comment</button>
+            </div>
+            <div class="card">
+                <p>name</p>
+                <p>img</p>
+                <button class="btn">Add to cart</button>
+                <button class="btn comment">Comment</button>
+            </div>
+            <div class="card">
+                <p>name</p>
+                <p>img</p>
+                <button class="btn">Add to cart</button>
+                <button class="btn comment">Comment</button>
+            </div>
+            <div class="card">
+                <p>name</p>
+                <p>img</p>
+                <button class="btn">Add to cart</button>
+                <button class="btn comment">Comment</button>
+            </div>
+        </div>
+        <div class="collapse">
+            <div class="ptitle">&gt; Support</div>
+            <div class="data">Drivers, Manuals</div>
+        </div>
+    </div>
+    <div class="item">
+        <h2>Parrot</h2>
+        <div class="grid">
+            <div class="card">
+                <p>name</p>
+                <p>img</p>
+                <button class="btn">Add to cart</button>
+                <button class="btn comment">Comment</button>
+            </div>
+            <div class="card">
+                <p>name</p>
+                <p>img</p>
+                <button class="btn">Add to cart</button>
+                <button class="btn comment">Comment</button>
+            </div>
+            <div class="card">
+                <p>name</p>
+                <p>img</p>
+                <button class="btn">Add to cart</button>
+                <button class="btn comment">Comment</button>
+            </div>
+            <div class="card">
+                <p>name</p>
+                <p>img</p>
+                <button class="btn">Add to cart</button>
+                <button class="btn comment">Comment</button>
+            </div>
+        </div>
+        <div class="collapse">
+            <div class="ptitle">&gt; Support</div>
+            <div class="data">Drivers, Manuals</div>
+        </div>
+    </div>
+    <div class="item">
+        <h2>Yuneec</h2>
+        <div class="grid">
+            <div class="card">
+                <p>name</p>
+                <p>img</p>
+                <button class="btn">Add to cart</button>
+                <button class="btn comment">Comment</button>
+            </div>
+            <div class="card">
+                <p>name</p>
+                <p>img</p>
+                <button class="btn">Add to cart</button>
+                <button class="btn comment">Comment</button>
+            </div>
+            <div class="card">
+                <p>name</p>
+                <p>img</p>
+                <button class="btn">Add to cart</button>
+                <button class="btn comment">Comment</button>
+            </div>
+            <div class="card">
+                <p>name</p>
+                <p>img</p>
+                <button class="btn">Add to cart</button>
+                <button class="btn comment">Comment</button>
+            </div>
+        </div>
+        <div class="collapse">
+            <div class="ptitle">&gt; Support</div>
+            <div class="data">Drivers, Manuals</div>
+        </div>
+    </div>
+</div>
+
+<div class="dialog">
+    <input type="text" id="rating">
+</div>
+<script>
+    $(document).ready(function () {
+        const items = $(".item");
+        let index;
+
+        const show = (i) => {
+            index = (i + items.length) % items.length;
+            items.hide();
+            items.eq(index).show();
+        };
+        $("#titles li").click(function () {
+            show($(this).index());
+            $("#base").hide();
+            $("#detailed").show();
+        });
+        $("#next").click(() => show(index+1));
+        $("#prev").click(() => show(index-1));
+        $("#top").click(() => {
+            $("#detailed").hide();
+            $("#base").show();
+        })
+
+        $(".collapse .ptitle").click(function () {
+            $(this).siblings(".data").slideToggle(200);
+        })
+
+        let current;
+
+        $(".dialog").dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "Confirm": function () {
+                    let rating = $("#rating").val();
+                    current.append("<p>Оценка: " + rating + "</p>");
+                    $(this).dialog("close");
+                }
+            }
+        })
+
+        $(".comment").click(function () {
+            current = $(this).closest(".card");
+            $(".dialog").dialog("open");
+        })
+
+    })
+</script>
+</body>
+</html>

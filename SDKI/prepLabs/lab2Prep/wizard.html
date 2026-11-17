@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wizard</title>
+    <script src="jquery/jquery.js"></script>
+    <style>
+        .bar { display: flex; gap: 15px; margin-bottom: 15px; }
+        .bar span { color: #aaa; }
+        .bar span.done { color: lime; }
+        .bar span.active { color: blue; font-weight: bold; }
+        .wstep { display: none; border: 1px solid black; padding: 20px; width: 300px; margin-bottom: 10px; }
+    </style>
+    <link rel="stylesheet" href="../../jquery/jquery-ui.css">
+    <script src="../../jquery/jquery.js"></script>
+    <script src="../../jquery/jquery-ui.js"></script>
+
+</head>
+<body>
+
+<div class="bar"><span>Чекор 1</span> <span>Чекор 2</span> <span>Чекор 3</span></div>
+
+<div class="wstep">Име: <input id="name"></div>
+<div class="wstep">Избор на камп …</div>
+<div class="wstep">Потврда: <span id="summary"></span></div>
+
+<button id="prev">Претходен</button>
+<button id="next">Следен</button>
+
+<script>
+    $(document).ready(function () {
+        let step = 0;
+
+        const show = () => {
+            $(".wstep").hide().eq(step).show();
+            $(".bar span").each(function (i) {
+                $(this).toggleClass("done", i < step).toggleClass("active", i === step);
+            });
+            $("#next").text(step === 2 ? "Заврши" : "Следен");
+            $("#summary").text($("#name").val());
+        };
+        show();
+
+        $("#next").click(() => {
+            if (step === 0 && $("#name").val().trim() === "") {
+                alert("Внесете име");
+                return;
+            }
+            if (step < 2) { step++; show(); }
+            else alert("Успешна пријава, " + $("#name").val() + "!");
+        });
+
+        $("#prev").click(() => { if (step > 0) step--; show(); });
+    });
+</script>
+</body>
+</html>

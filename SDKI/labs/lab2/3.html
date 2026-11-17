@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings</title>
+    <link rel="stylesheet" href="../../jquery/jquery-ui.css">
+    <script src="../../jquery/jquery.js"></script>
+    <script src="../../jquery/jquery-ui.js"></script>
+    <style>
+        #content, .screen {
+            display: none;
+        }
+
+        #home p {
+            cursor: pointer;
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+            margin: 0;
+        }
+
+        #progressbar {
+            width: 30%;
+            border-radius: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="home">
+    <p data-target="#wifi">Wi-Fi</p>
+    <p data-target="#bt">Bluetooth</p>
+    <p data-target="#sound">Звук</p>
+    <p data-target="#display">Екран</p>
+    <p data-target="#battery">Батерија</p>
+</div>
+
+<div id="content">
+    <button id="back">← Назад</button>
+
+    <div class="screen" id="wifi">
+        <h2>Wi-Fi</h2>
+        <p>Вклучено · Мрежа: FINKI</p>
+    </div>
+
+    <div class="screen" id="bt">
+        <h2>Bluetooth</h2>
+        <p>Исклучено</p>
+    </div>
+
+    <div class="screen" id="sound">
+        <h2>Звук</h2>
+        <p>Јачина: 70%</p>
+    </div>
+
+    <div class="screen" id="display">
+        <h2>Екран</h2>
+        <p>Осветленост: 50%</p>
+    </div>
+
+    <div class="screen" id="battery">
+        <h2>Батерија</h2>
+        <div id="progressbar"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#progressbar").progressbar({ value: 37 });
+
+        $("#home p").click(function () {
+            $("#home").hide();
+            $(".screen").hide();
+            $($(this).data("target")).show();
+            $("#content").show();
+        });
+
+        $("#back").click(function () {
+            $("#content").hide();
+            $("#home").show();
+        });
+    });
+</script>
+</body>
+</html>

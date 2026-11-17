@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        .tabs {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 20px;
+            width: 60%;
+            margin: 40px auto;
+            border: 1px solid black;
+            padding: 15px;
+        }
+        .tablist p {
+            margin: 0 0 8px;
+            padding: 10px;
+            border: 1px solid gray;
+            cursor: pointer;
+        }
+        .tablist p.on {
+            background: #333;
+            color: white;
+        }
+        .panel { display: none; }
+        .panel.opis { display: block; }
+    </style>
+    <link rel="stylesheet" href="../../jquery/jquery-ui.css">
+    <script src="../../jquery/jquery.js"></script>
+    <script src="../../jquery/jquery-ui.js"></script>
+</head>
+<body>
+
+<div class="tabs">
+    <div class="tablist">
+        <p class="on" data-target=".opis">Опис</p>
+        <p data-target=".spec">Спецификации</p>
+        <p data-target=".rev">Рецензии (<span id="count"></span>)</p>
+    </div>
+
+    <div class="content">
+        <div class="panel opis">
+            <h2>Опис</h2>
+            <p>AMD Ryzen 7 7700X, 8 јадра, 16 нишки, до 5.4 GHz.</p>
+        </div>
+        <div class="panel spec">
+            <h2>Спецификации</h2>
+            <p>Сокет AM5 · 105 W · DDR5</p>
+        </div>
+        <div class="panel rev">
+            <h2>Рецензии</h2>
+            <ul>
+                <li>Одличен за гејминг.</li>
+                <li>Брз, но се грее.</li>
+                <li>Вреди за цената.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#count").text($(".rev li").length);
+
+        $(".tablist p").click(function () {
+            $(".tablist p").removeClass("on");
+            $(this).addClass("on");
+            $(".panel").hide();
+            $($(this).data("target")).fadeIn(300);
+        });
+    });
+</script>
+</body>
+</html>
