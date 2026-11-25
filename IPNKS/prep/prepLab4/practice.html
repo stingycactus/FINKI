@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Practice</title>
+    <script>
+        function readIt() {
+            const v = document.querySelector("#num").value.trim();
+            const out = document.querySelector("#out");
+            if (v === "") {
+                out.textContent = "";
+                return;
+            }
+            const n = Number(v);
+            if (!Number.isInteger(n)) {
+                out.textContent = "Not an integer";
+            } else {
+                out.textContent = n % 3 === 0 ? "div by 3" : "not div by 3";
+            }
+        }
+
+        function userLevel(s) {
+            if (s.length <=3 ) {
+                return "Short";
+            } else if (s.length <= 8) {
+                return "OK";
+            }
+            return "Long";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const msg = document.querySelector("#msg");
+            msg.textContent = "test";
+            console.log(msg);
+            let read = document.querySelector("#read");
+            /**
+             * @type {HTMLInputElement}
+             */
+            const input = document.querySelector("#num");
+            read.addEventListener("click", () => {
+                readIt();
+            })
+            input.addEventListener("change", () => {
+                readIt();
+            })
+            const userInput = document.querySelector("#user");
+            userInput.addEventListener("input", () => {
+                const value = userInput.value.trim();
+                let length = value.length;
+                const upper = (value.match(/[A-Z]/g) || []).length
+                const digit = (value.match(/[0-9]/g) || []).length
+                const symbols = (value.match(/[^A-Za-z0-9]/g) || []).length
+                let out = document.querySelector("#info");
+                let level = userLevel(value);
+                out.textContent = `length: ${length} (${level}), upper: ${upper}, digits: ${digit}, symbols: ${symbols}`;
+            })
+        });
+    </script>
+</head>
+<body>
+<p id="msg">Hello</p>
+<input type="text" id="num">
+<button id="read">Read</button>
+<span id="out"></span>
+<input type="text" id="user">
+<span id="info"></span>
+</body>
+</html>
